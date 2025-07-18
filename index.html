@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Junk Shop Price Calculator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <span class="logo-text">JunkValue</span>
+        </div>
+        <nav class="top-nav">
+            <a href="#" class="nav-link">Home</a>
+            <a href="#calculator" class="nav-link">Calculator</a>
+            <a href="#catalog" class="nav-link">Catalog</a>
+            <a href="#faq" class="nav-link">FAQ</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section class="hero-section">
+            <div class="hero-text">
+                <h1 class="hero-title">JunkValue Website</h1>
+                <p class="hero-subtitle">Check the current prices, Recycling Tips</p>
+                <p class="hero-description">Sell your recyclable items for the best rates in town. Use our calculator to estimate your earnings and browse our catalog for accepted materials.</p>
+                <a href="#calculator" class="hero-button">Try the Price Calculator</a>
+                <a href="#catalog" class="hero-link">View Item Catalog</a>
+            </div>
+        </section>
+
+       <section id="calculator" class="calculator-section">
+    <div class="calculator-container">
+        <h2 class="section-title">Price Calculator</h2>
+        <div class="calculator-box">
+            <div class="calculator-form">
+                <div class="form-group">
+                    <label>What are you selling?</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="material" value="copper" checked>
+                            <span>Copper Wire</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="material" value="pet">
+                            <span><br>PET Bottles</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="material" value="aluminum">
+                            <span>Aluminum Cans</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="material" value="cardboard">
+                            <span>Cardboard</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="material" value="steel">
+                            <span>Steel</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="material" value="glass">
+                            <span>Glass Bottles</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="material" value="computer">
+                            <span>Computer Parts</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="weight">Enter Weight (kg):</label>
+                    <input type="number" id="weight" placeholder="0.00" step="0.01">
+                </div>
+                <div class="form-group button-group">
+                    <button id="calculate-btn" class="calculate-button">Calculate Value</button>
+                    <button id="reset-btn" class="reset-button">Reset</button>
+                </div>
+                <div class="result-box">
+                    <p>Estimated Value:</p>
+                    <h3 id="result-value">₱0.00</h3>
+                </div>
+            </div>
+            <div class="accepted-items">
+                <h3>Accepted Items:</h3>
+                <ul>
+                    <li>Copper Wire (₱285.70/kg)</li>
+                    <li>PET Bottles (₱28.57/kg)</li>
+                    <li>Aluminum Cans (₱68.57/kg)</li>
+                    <li>Cardboard (₱17.14/kg)</li>
+                    <li>Steel (₱45.71/kg)</li>
+                    <li>Glass Bottles (₱14.29/kg)</li>
+                    <li>Computer Parts (₱85.71/kg)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+       <section id="catalog" class="catalog-section">
+    <h2 class="section-title">Item Catalog</h2>
+    <div class="catalog-grid">
+        <div class="catalog-item">
+            <img src="img/Copper.jpg" alt="Copper Wire">
+            <div class="item-info">
+                <h3>Copper Wire</h3>
+                <p class="price">₱285.70/kg</p>
+                <p class="recycling-tip">Strip insulation for higher value</p>
+            </div>
+        </div>
+        <div class="catalog-item">
+            <img src="img/Plastic.webp" alt="PET Bottles">
+            <div class="item-info">
+                <h3>PET Bottles</h3>
+                <p class="price">₱28.57/kg</p>
+                <p class="recycling-tip">Remove caps and rinse clean</p>
+            </div>
+        </div>
+        <div class="catalog-item">
+            <img src="img/aluminum.jpg" alt="Aluminum Cans">
+            <div class="item-info">
+                <h3>Aluminum Cans</h3>
+                <p class="price">₱68.57/kg</p>
+                <p class="recycling-tip">Crush to save space</p>
+            </div>
+        </div>
+        <div class="catalog-item">
+            <img src="img/cardboard.jpg" alt="Cardboard">
+            <div class="item-info">
+                <h3>Cardboard</h3>
+                <p class="price">₱17.14/kg</p>
+                <p class="recycling-tip">Flatten boxes before bringing</p>
+            </div>
+        </div>
+        <div class="catalog-item">
+            <img src="img/steel.jpg" alt="Steel">
+            <div class="item-info">
+                <h3>Steel</h3>
+                <p class="price">₱45.71/kg</p>
+                <p class="recycling-tip">Remove non-metal attachments</p>
+            </div>
+        </div>
+        <div class="catalog-item">
+            <img src="img/glass.jpg" alt="Glass Bottles">
+            <div class="item-info">
+                <h3>Glass Bottles</h3>
+                <p class="price">₱14.29/kg</p>
+                <p class="recycling-tip">Separate by color if possible</p>
+            </div>
+        </div>
+        <div class="catalog-item">
+            <img src="img/computer.jpg" alt="Computer Parts">
+            <div class="item-info">
+                <h3>Computer Parts</h3>
+                <p class="price">₱85.71/kg</p>
+                <p class="recycling-tip">Remove batteries if present</p>
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+
+        <section class="price-trend-section">
+            <h2 class="section-title">Price Trends (2025)</h2>
+            <div class="chart-container">
+                <canvas id="priceChart"></canvas>
+            </div>
+        </section>
+
+        <section id="faq" class="faq-section">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <h3 class="faq-question">How to prepare items for sale?</h3>
+                    <p class="faq-answer">Clean and sort your materials by type. Remove any non-recyclable components like plastic labels from metal items or batteries from electronics.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Do you accept broken electronics?</h3>
+                    <p class="faq-answer">Yes, we accept broken electronics but the price may be lower than working items. Please remove any batteries before bringing them in.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">What are your business hours?</h3>
+                    <p class="faq-answer">We're open Monday to Saturday, 8:00 AM to 6:00 PM. Closed on Sundays and public holidays.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Is there a minimum weight requirement?</h3>
+                    <p class="faq-answer">No minimum weight, but items under 1kg may be paid at a slightly lower rate due to handling costs.</p>
+                </div>
+            </div>
+        </section>
+
+         <section id="tips" class="tips-section">
+            <h2 class="section-title">Recycling Tips</h2>
+            <div class="tips-container">
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <i class="fas fa-sort"></i>
+                        </div>
+                        <h3>Proper Sorting</h3>
+                        <p>Separate materials by type (metals, plastics, glass) to maximize their recycling potential and get better prices.</p>
+                    </div>
+                    
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <i class="fas fa-broom"></i>
+                        </div>
+                        <h3>Clean Materials</h3>
+                        <p>Rinse containers and remove food residue. Clean materials are worth more and are easier to process.</p>
+                    </div>
+                    
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <i class="fas fa-compress-alt"></i>
+                        </div>
+                        <h3>Compact When Possible</h3>
+                        <p>Flatten boxes, crush cans, and cut large items to save space and reduce transportation costs.</p>
+                    </div>
+                    
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <i class="fas fa-battery-three-quarters"></i>
+                        </div>
+                        <h3>Battery Safety</h3>
+                        <p>Remove batteries from electronics and recycle them separately to prevent fires and contamination.</p>
+                    </div>
+                    
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <h3>Remove Labels</h3>
+                        <p>Peel off non-recyclable components like plastic labels from glass jars and metal cans.</p>
+                    </div>
+                    
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <h3>Check Local Rates</h3>
+                        <p>Prices fluctuate - call ahead or check our price trends before bringing in large quantities.</p>
+                    </div>
+                </div>
+                
+                <div class="bonus-tips">
+                    <h3>Pro Recycling Tips</h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Copper wire with insulation removed fetches 30% higher prices</li>
+                        <li><i class="fas fa-check-circle"></i> Keep aluminum separate from other metals for better pricing</li>
+                        <li><i class="fas fa-check-circle"></i> Electronics with intact components may be worth more as parts than scrap</li>
+                        <li><i class="fas fa-check-circle"></i> Separate colored glass from clear glass - they have different recycling streams</li>
+                        <li><i class="fas fa-check-circle"></i> Bundle similar items together to save time during weighing</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+       
+
+<section class="location-section">
+    <h2 class="section-title">Location & Hours</h2>
+    <div class="location-container">
+        <div class="location-info">
+            <h3>Visit Us</h3>
+            <p><i class="fas fa-map-marker-alt"></i> P2GP+JVX, Topaz, Novaliches, Quezon City, Metro Manila</p>
+            <p><i class="fas fa-phone"></i> (02) 8994 4218</p>
+            <p><i class="fas fa-envelope"></i> info@bestlink.edu.ph</p>
+            <h3>Business Hours</h3>
+            <p>Monday - Friday: 8:00 AM - 6:00 PM</p>
+            <p>Saturday: 9:00 AM - 4:00 PM</p>
+            <p>Sunday: Closed</p>
+        </div>
+        <div class="location-map">
+            <!-- Google Maps Embed with Plus Code location -->
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3858.926396504214!2d121.0223089757197!3d14.7563094857499!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b0f9086d659d%3A0x3db09a502a5b3d8f!2sBestlink%20College%20of%20the%20Philippines%20-%20Millionaires%20Village!5e0!3m2!1sen!2sph!4v1710860612709!5m2!1sen!2sph" 
+                width="100%" 
+                height="100%" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy"
+                title="Bestlink College of the Philippines - Millionaires Village Campus Location">
+            </iframe>
+        </div>
+    </div>
+</section>
+
+    </main>
+
+   <footer class="footer">
+    <div class="footer-content">
+        <div class="footer-logo">
+            <span>JunkValue &copy; 2025</span>
+        </div>
+        <div class="footer-links">
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="terms-of-service.html">Terms of Service</a>
+            <a href="contact-us.html">Contact Us</a>
+        </div>
+        <div class="footer-social">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+    </div>
+</footer>
+
+    <script>
+        // Price Calculator Functionality
+        document.getElementById('calculate-btn').addEventListener('click', function() {
+            const material = document.querySelector('input[name="material"]:checked').value;
+            const weight = parseFloat(document.getElementById('weight').value) || 0;
+            let pricePerKg = 0;
+            
+            // Set prices based on material type
+            switch(material) {
+                case 'metals':
+                    pricePerKg = 5.00; // Copper wire price
+                    break;
+                case 'plastics':
+                    pricePerKg = 0.50; // PET bottles price
+                    break;
+                case 'electronics':
+                    pricePerKg = 10.00; // Average electronics price
+                    break;
+            }
+            
+            const totalValue = weight * pricePerKg;
+            document.getElementById('result-value').textContent = '$' + totalValue.toFixed(2);
+        });
+
+        // Price Chart
+        const ctx = document.getElementById('priceChart').getContext('2d');
+        const priceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                datasets: [
+                    {
+                        label: 'Copper Wire ($/kg)',
+                        data: [4.80, 4.85, 4.90, 5.00, 5.10, 5.05, 5.00],
+                        borderColor: '#888',
+                        backgroundColor: 'rgba(136, 136, 136, 0.1)',
+                        tension: 0.3
+                    },
+                    {
+                        label: 'PET Bottles ($/kg)',
+                        data: [0.45, 0.47, 0.48, 0.50, 0.52, 0.51, 0.50],
+                        borderColor: '#555',
+                        backgroundColor: 'rgba(85, 85, 85, 0.1)',
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Aluminum Cans ($/kg)',
+                        data: [1.10, 1.15, 1.18, 1.20, 1.22, 1.21, 1.20],
+                        borderColor: '#222',
+                        backgroundColor: 'rgba(34, 34, 34, 0.1)',
+                        tension: 0.3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: '2025 Recycling Material Price Trends'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Price per kg for each material
+        const prices = {
+            'copper': 285.70,
+            'pet': 28.57,
+            'aluminum': 68.57,
+            'cardboard': 17.14,
+            'steel': 45.71,
+            'glass': 14.29,
+            'computer': 85.71
+        };
+
+        const calculateBtn = document.getElementById('calculate-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const weightInput = document.getElementById('weight');
+        const resultValue = document.getElementById('result-value');
+        const materialRadios = document.querySelectorAll('input[name="material"]');
+
+        calculateBtn.addEventListener('click', function() {
+            // Get selected material
+            let selectedMaterial;
+            for (const radio of materialRadios) {
+                if (radio.checked) {
+                    selectedMaterial = radio.value;
+                    break;
+                }
+            }
+
+            // Get weight value
+            const weight = parseFloat(weightInput.value);
+            
+            // Validate weight input
+            if (isNaN(weight) || weight <= 0) {
+                alert("Please enter a valid weight greater than 0");
+                return;
+            }
+
+            // Calculate total value
+            const totalValue = weight * prices[selectedMaterial];
+
+            // Display result
+            resultValue.textContent = `₱${totalValue.toFixed(2)}`;
+        });
+
+        resetBtn.addEventListener('click', function() {
+            weightInput.value = ''; // Clear weight input
+            resultValue.textContent = '₱0.00'; // Reset result display
+        });
+    });
+</script>
+
+</body>
+</html>

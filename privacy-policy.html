@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - JunkValue</title>
+    <style>
+        :root {
+            --bg-beige: #E6D8C3;
+            --sales-orange: #D97A41;
+            --stock-green: #708B4C;
+            --panel-cream: #F2EAD3;
+            --topbar-brown: #3C342C;
+            --text-dark: #2E2B29;
+            --icon-green: #6A7F46;
+            --icon-orange: #D97A41;
+            
+            --primary-color: var(--stock-green);
+            --secondary-color: var(--sales-orange);
+            --accent-color: var(--icon-green);
+            --dark-color: var(--topbar-brown);
+            --light-color: var(--panel-cream);
+            --text-color: var(--text-dark);
+            --text-light: #777;
+        }
+
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--bg-beige);
+            color: var(--text-dark);
+        }
+
+        /* Container Styles */
+        .container {
+            background-color: var(--panel-cream);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Header Styles */
+        header {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--dark-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        h1::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 5px;
+            background-color: var(--secondary-color);
+            border-radius: 3px;
+        }
+
+        .last-updated {
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        /* Section Styles */
+        h2 {
+            color: var(--primary-color);
+            margin-top: 25px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed var(--accent-color);
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        li::before {
+            content: "•";
+            color: var(--secondary-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        /* Link Styles */
+        a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: var(--dark-color);
+            text-decoration: underline;
+        }
+
+        /* Footer Styles */
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button" style="display: inline-flex; align-items: center; color: var(--dark-color); text-decoration: none; font-weight: 600; padding: 8px 12px; border-radius: 6px; transition: all 0.3s ease; background-color: rgba(112, 139, 76, 0.1); margin-bottom: 1rem;">
+    <i class="fas fa-arrow-left" style="margin-right: 6px;"></i> Back to Home
+</a>
+        <header>
+            <h1>Privacy Policy</h1>
+            <p class="last-updated">Last Updated: January 1, 2025</p>
+        </header>
+
+        <main>
+            <h2>1. Information We Collect</h2>
+            <p>We may collect personal information such as your name, email address, and usage data when you interact with our website.</p>
+
+            <h2>2. How We Use Your Information</h2>
+            <p>We use the information we collect to:</p>
+            <ul>
+                <li>Provide and maintain our service</li>
+                <li>Improve user experience</li>
+                <li>Communicate with you</li>
+            </ul>
+
+            <h2>3. Cookies</h2>
+            <p>We use cookies to track activity on our website and hold certain information to improve your experience.</p>
+
+            <h2>4. Third-Party Services</h2>
+            <p>We may employ third-party companies to facilitate our service, who have access to your information only to perform specific tasks.</p>
+
+            <h2>5. Security</h2>
+            <p>We strive to protect your personal information but cannot guarantee absolute security.</p>
+
+            <h2>6. Changes to This Policy</h2>
+            <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page.</p>
+
+            <h2>7. Contact Us</h2>
+            <p>If you have any questions about this Privacy Policy, please <a href="contact-us.html">contact us</a>.</p>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 JunkValue. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - JunkValue</title>
+    <style>
+        :root {
+            --bg-beige: #E6D8C3;
+            --sales-orange: #D97A41;
+            --stock-green: #708B4C;
+            --panel-cream: #F2EAD3;
+            --topbar-brown: #3C342C;
+            --text-dark: #2E2B29;
+            --icon-green: #6A7F46;
+            --icon-orange: #D97A41;
+            
+            --primary-color: var(--stock-green);
+            --secondary-color: var(--sales-orange);
+            --accent-color: var(--icon-green);
+            --dark-color: var(--topbar-brown);
+            --light-color: var(--panel-cream);
+            --text-color: var(--text-dark);
+            --text-light: #777;
+        }
+
+        /* Base Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--bg-beige);
+            color: var(--text-dark);
+        }
+
+        /* Document Container */
+        .document-container {
+            background-color: var(--light-color);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* Header Styles */
+        .document-header {
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .document-header::after {
+            content: "";
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+
+        h1 {
+            color: var(--dark-color);
+            font-size: 2.4rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .last-updated {
+            color: var(--text-light);
+            font-style: italic;
+            font-size: 0.95rem;
+        }
+
+        /* Content Styles */
+        h2 {
+            color: var(--primary-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--accent-color);
+            font-size: 1.5rem;
+            position: relative;
+            padding-left: 1.2rem;
+        }
+
+        h2::before {
+            content: "§";
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            color: var(--text-dark);
+        }
+
+        /* List Styles */
+        ul {
+            padding-left: 1.8rem;
+            margin: 1rem 0;
+        }
+
+        li {
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 1.2rem;
+        }
+
+        li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.6rem;
+            width: 8px;
+            height: 8px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+        }
+
+        /* Link Styles */
+        a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border-bottom: 1px dotted var(--secondary-color);
+        }
+
+        a:hover {
+            color: var(--dark-color);
+            border-bottom: 1px solid var(--dark-color);
+        }
+
+        /* Footer */
+        .document-footer {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px dashed var(--accent-color);
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .document-container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .document-container {
+                padding: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="document-container">
+        <a href="index.html" class="back-button" style="display: inline-flex; align-items: center; color: var(--dark-color); text-decoration: none; font-weight: 600; padding: 8px 12px; border-radius: 6px; transition: all 0.3s ease; background-color: rgba(112, 139, 76, 0.1); margin-bottom: 1rem;">
+    <i class="fas fa-arrow-left" style="margin-right: 6px;"></i> Back to Home
+</a>
+        <header class="document-header">
+            <h1>Terms of Service</h1>
+            <p class="last-updated">Last Updated: January 1, 2025</p>
+        </header>
+
+        <main>
+            <h2>1. Acceptance of Terms</h2>
+            <p>By accessing or using JunkValue, you agree to be bound by these Terms of Service.</p>
+
+            <h2>2. User Responsibilities</h2>
+            <p>You agree not to:</p>
+            <ul>
+                <li>Use the service for any illegal purpose</li>
+                <li>Attempt to gain unauthorized access to our systems</li>
+                <li>Interfere with the proper working of the service</li>
+            </ul>
+
+            <h2>3. Intellectual Property</h2>
+            <p>All content on JunkValue is our property or the property of our licensors and is protected by copyright laws.</p>
+
+            <h2>4. Termination</h2>
+            <p>We may terminate or suspend access to our service immediately, without prior notice, for any breach of these Terms.</p>
+
+            <h2>5. Limitation of Liability</h2>
+            <p>JunkValue shall not be liable for any indirect, incidental, special, or consequential damages resulting from your use of the service.</p>
+
+            <h2>6. Changes to Terms</h2>
+            <p>We reserve the right to modify these terms at any time. Your continued use of the service constitutes acceptance of the new terms.</p>
+
+            <h2>7. Governing Law</h2>
+            <p>These Terms shall be governed by the laws of the Philippines without regard to its conflict of law provisions.</p>
+
+            <h2>8. Contact Us</h2>
+            <p>If you have any questions about these Terms, please <a href="contact-us.html">contact us</a>.</p>
+        </main>
+
+        <footer class="document-footer">
+            <p>&copy; 2025 JunkValue. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
