@@ -122,7 +122,7 @@ mysqli_stmt_bind_param($user_stmt, "i", $user_id);
 mysqli_stmt_execute($user_stmt);
 $user_result = mysqli_stmt_get_result($user_stmt);
 $user = mysqli_fetch_assoc($user_result);
-$user_name = $user['first_name'] . ' ' . $user['last_name'];
+$user_name = $user['last_name'] . ' ' . $user['first_name'];
 $user_initials = strtoupper(substr($user['first_name'], 0, 1) . substr($user['last_name'], 0, 1));
 ?>
 
@@ -143,79 +143,51 @@ $user_initials = strtoupper(substr($user['first_name'], 0, 1) . substr($user['la
             --text-dark: #2E2B29;
             --icon-green: #6A7F46;
             --icon-orange: #D97A41;
-            
-            --primary-color: var(--stock-green);
-            --secondary-color: var(--sales-orange);
-            --accent-color: var(--icon-green);
-            --dark-color: var(--topbar-brown);
-            --light-color: var(--panel-cream);
-            --text-color: var(--text-dark);
-            --text-light: #777;
+            --accent-blue: #4A89DC;
+            --sidebar-width: 280px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
             background-color: var(--bg-beige);
             color: var(--text-dark);
             line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        header {
-            background-color: var(--topbar-brown);
+        /* Sidebar - New Vibrant Design */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--topbar-brown) 0%, #2A2520 100%);
             color: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px 0;
             position: sticky;
             top: 0;
-            z-index: 100;
+            height: 100vh;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+            z-index: 10;
+            overflow-y: auto;
         }
 
-        .header-content {
+        .sidebar-header {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--panel-cream);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo::before {
-            content: "♻";
-            font-size: 28px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-info span {
-            font-weight: 500;
-            color: var(--panel-cream);
+            padding: 0 20px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
         }
 
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             background-color: var(--panel-cream);
             display: flex;
@@ -223,34 +195,51 @@ $user_initials = strtoupper(substr($user['first_name'], 0, 1) . substr($user['la
             justify-content: center;
             font-weight: bold;
             color: var(--topbar-brown);
-            overflow: hidden;
+            font-size: 24px;
+            margin-bottom: 15px;
+            border: 3px solid var(--sales-orange);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
         }
 
         .user-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            border-radius: 50%;
         }
 
-        .dashboard {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 30px;
-            padding: 30px 0;
+        .user-name {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            text-align: center;
         }
 
-        .sidebar {
-            background-color: var(--panel-cream);
-            border-radius: 15px;
-            padding: 25px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            height: fit-content;
-            position: sticky;
-            top: 80px;
+        .user-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: var(--panel-cream);
+            opacity: 0.8;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background-color: #2ECC71;
+            border-radius: 50%;
         }
 
         .nav-menu {
             list-style: none;
+            padding: 0 15px;
         }
 
         .nav-menu li {
@@ -260,49 +249,167 @@ $user_initials = strtoupper(substr($user['first_name'], 0, 1) . substr($user['la
         .nav-menu a {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 25px;
-            color: var(--text-dark);
+            gap: 15px;
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.8);
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s;
-            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-menu a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background-color: var(--sales-orange);
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            opacity: 0;
         }
 
         .nav-menu a:hover {
-            background-color: rgba(106, 127, 70, 0.1);
-            border-left-color: var(--icon-green);
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-menu a:hover::before {
+            transform: translateX(0);
+            opacity: 1;
         }
 
         .nav-menu a.active {
-            background-color: rgba(106, 127, 70, 0.15);
-            border-left-color: var(--icon-green);
-            color: var(--icon-green);
+            background-color: rgba(255,255,255,0.15);
+            color: white;
+            font-weight: 600;
+        }
+
+        .nav-menu a.active::before {
+            transform: translateX(0);
+            opacity: 1;
         }
 
         .nav-menu i {
             width: 20px;
             text-align: center;
             font-size: 18px;
+            color: var(--panel-cream);
         }
 
+        .nav-menu a.active i {
+            color: var(--sales-orange);
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content Area */
         .main-content {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
         }
 
-        .card {
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--topbar-brown);
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--sales-orange);
+            border-radius: 3px;
+        }
+
+        .notification-bell {
+            position: relative;
+            width: 40px;
+            height: 40px;
             background-color: white;
-            border-radius: 12px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .notification-bell:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            width: 18px;
+            height: 18px;
+            background-color: var(--sales-orange);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-card {
+            background-color: white;
+            border-radius: 15px;
             padding: 25px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            margin-bottom: 30px;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .card-header {
@@ -327,7 +434,23 @@ $user_initials = strtoupper(substr($user['first_name'], 0, 1) . substr($user['la
             color: var(--icon-green);
         }
 
-        /* Transaction History Specific Styles */
+        .view-all {
+            color: var(--icon-green);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .view-all:hover {
+            color: var(--sales-orange);
+            transform: translateX(3px);
+        }
+
+        /* Transaction Filters */
         .transaction-filters {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -377,7 +500,8 @@ $user_initials = strtoupper(substr($user['first_name'], 0, 1) . substr($user['la
             left: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--text-light);
+            color: var(--text-dark);
+            opacity: 0.7;
         }
         
         .filter-buttons {
@@ -420,38 +544,42 @@ $user_initials = strtoupper(substr($user['first_name'], 0, 1) . substr($user['la
             background-color: #f8f9fa;
             border-color: rgba(0,0,0,0.2);
         }
-        
+
+        /* Transaction Table */
         .transaction-table {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
+            border-collapse: separate;
+            border-spacing: 0;
         }
-        
+
+        .transaction-table thead {
+            position: sticky;
+            top: 0;
+        }
+
         .transaction-table th {
-            background-color: rgba(106, 127, 70, 0.05);
-            padding: 14px 16px;
-            text-align: left;
+            background-color: rgba(106, 127, 70, 0.08);
             font-weight: 600;
             color: var(--icon-green);
-            font-size: 14px;
-            border-bottom: 2px solid rgba(0,0,0,0.05);
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 2px solid rgba(106, 127, 70, 0.2);
         }
-        
+
         .transaction-table td {
-            padding: 16px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            vertical-align: middle;
-            font-size: 14px;
-        }
-        
-        .transaction-table tr:not(:last-child) {
+            padding: 14px 15px;
+            text-align: left;
             border-bottom: 1px solid rgba(0,0,0,0.05);
         }
-        
-        .transaction-table tr:hover {
+
+        .transaction-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .transaction-table tr:hover td {
             background-color: rgba(106, 127, 70, 0.03);
         }
-        
+
         .transaction-id {
             color: var(--icon-green);
             font-weight: 500;
@@ -460,7 +588,8 @@ $user_initials = strtoupper(substr($user['first_name'], 0, 1) . substr($user['la
         
         .transaction-items {
             font-size: 13px;
-            color: var(--text-light);
+            color: var(--text-dark);
+            opacity: 0.7;
             margin-top: 5px;
         }
         
@@ -497,7 +626,81 @@ $user_initials = strtoupper(substr($user['first_name'], 0, 1) . substr($user['la
             font-weight: 600;
             white-space: nowrap;
         }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+            z-index: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--icon-green) 0%, var(--stock-green) 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(106, 127, 70, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(106, 127, 70, 0.4);
+        }
+
+        .export-btn {
+            background: linear-gradient(90deg, var(--sales-orange) 0%, #e67a41 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(217, 122, 65, 0.3);
+        }
         
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(217, 122, 65, 0.4);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-dark);
+            opacity: 0.7;
+        }
+
+        .empty-state i {
+            font-size: 50px;
+            color: var(--icon-green);
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        /* Pagination */
         .pagination {
             display: flex;
             justify-content: center;
@@ -552,70 +755,70 @@ $user_initials = strtoupper(substr($user['first_name'], 0, 1) . substr($user['la
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-light);
+            color: var(--text-dark);
+            opacity: 0.7;
         }
-        
-        .no-transactions {
-            text-align: center;
-            padding: 40px;
-            color: var(--text-light);
-        }
-        
-        .no-transactions i {
-            font-size: 40px;
-            margin-bottom: 15px;
-            color: rgba(106, 127, 70, 0.3);
-        }
-        
-        .no-transactions p {
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-        
-        .export-btn {
-            background: linear-gradient(90deg, var(--sales-orange) 0%, #e67a41 100%);
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            background-color: var(--sales-orange);
             color: white;
-            border: none;
-            padding: 10px 20px;
             border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            display: flex;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
             align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-            box-shadow: 0 3px 10px rgba(217, 122, 65, 0.3);
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
         }
-        
-        .export-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(217, 122, 65, 0.4);
-        }
-        
+
         /* Responsive styles */
-        @media (max-width: 1024px) {
-            .dashboard {
-                grid-template-columns: 1fr;
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 240px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                transition: all 0.3s ease;
             }
             
-            .sidebar {
-                position: static;
+            .sidebar.active {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
             }
         }
-        
+
         @media (max-width: 768px) {
+            .transaction-filters {
+                grid-template-columns: 1fr 1fr;
+            }
+            
             .transaction-table {
                 display: block;
                 overflow-x: auto;
                 white-space: nowrap;
             }
-            
-            .transaction-filters {
-                grid-template-columns: 1fr 1fr;
-            }
         }
         
-        @media (max-width: 480px) {
+        @media (max-width: 576px) {
             .transaction-filters {
                 grid-template-columns: 1fr;
             }
@@ -635,7 +838,7 @@ $user_initials = strtoupper(substr($user['first_name'], 0, 1) . substr($user['la
                 height: 36px;
             }
             
-            .card {
+            .dashboard-card {
                 padding: 20px 15px;
             }
             
@@ -647,228 +850,248 @@ $user_initials = strtoupper(substr($user['first_name'], 0, 1) . substr($user['la
     </style>
 </head>
 <body>
-    <header>
-        <div class="container header-content">
-            <div class="logo">JunkValue</div>
-            <div class="user-info">
-                <span>Hello, <?php echo htmlspecialchars($user_name); ?>!</span>
-                <div class="user-avatar">
-                    <?php if (!empty($user['profile_image']) && file_exists($user['profile_image'])): ?>
-                        <img src="<?php echo htmlspecialchars($user['profile_image']); ?>" alt="Profile">
-                    <?php else: ?>
-                        <?php echo $user_initials; ?>
-                    <?php endif; ?>
-                </div>
+    <!-- Mobile Menu Toggle -->
+    <div class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="user-avatar">
+                <?php if (!empty($user['profile_image']) && file_exists($user['profile_image'])): ?>
+                    <img src="<?php echo htmlspecialchars($user['profile_image']); ?>" alt="Profile">
+                <?php else: ?>
+                    <?php echo $user_initials; ?>
+                <?php endif; ?>
+            </div>
+            <div class="user-name"><?php echo htmlspecialchars($user_name); ?></div>
+            <div class="user-status">
+                <span class="status-indicator"></span>
+                <span>Active</span>
             </div>
         </div>
-    </header>
-    
-    <div class="container">
-        <div class="dashboard">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <ul class="nav-menu">
-                    <li><a href="index.php"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="#" class="active"><i class="fas fa-history"></i> Transaction History</a></li>
-                    <li><a href="schedule.php"><i class="fas fa-calendar-alt"></i> Schedule Pickup</a></li>
-                    <li><a href="prices.php"><i class="fas fa-coins"></i> Current Prices</a></li>
-                    <li><a href="rewards.php"><i class="fas fa-award"></i> Loyalty Rewards</a></li>
-                    <li><a href="settings.php"><i class="fas fa-user-cog"></i> Account Settings</a></li>
-                    <li><a href="login/login.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                </ul>
-            </div>
-            
-            <!-- Main Content -->
-            <div class="main-content">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-history"></i> Transaction History</h3>
-                        <button class="export-btn">
-                            <i class="fas fa-download"></i> Export
-                        </button>
-                    </div>
-                    
-                    <!-- Filters -->
-                    <form method="GET" action="">
-                        <input type="hidden" name="page" value="1"> <!-- Reset to page 1 when filters change -->
-                        <div class="transaction-filters">
-                            <div class="filter-group">
-                                <label>Transaction Type</label>
-                                <select name="type">
-                                    <option value="">All Types</option>
-                                    <option value="Pickup" <?php echo ($type_filter == 'Pickup') ? 'selected' : ''; ?>>Pickups</option>
-                                    <option value="Walk-in" <?php echo ($type_filter == 'Walk-in') ? 'selected' : ''; ?>>Walk-in Sales</option>
-                                    <option value="Loyalty" <?php echo ($type_filter == 'Loyalty') ? 'selected' : ''; ?>>Loyalty Rewards</option>
-                                </select>
-                            </div>
-                            
-                            <div class="filter-group">
-                                <label>Status</label>
-                                <select name="status">
-                                    <option value="">All Statuses</option>
-                                    <option value="Completed" <?php echo ($status_filter == 'Completed') ? 'selected' : ''; ?>>Completed</option>
-                                    <option value="Pending" <?php echo ($status_filter == 'Pending') ? 'selected' : ''; ?>>Pending</option>
-                                    <option value="Cancelled" <?php echo ($status_filter == 'Cancelled') ? 'selected' : ''; ?>>Cancelled</option>
-                                </select>
-                            </div>
-                            
-                            <div class="filter-group">
-                                <label>Date From</label>
-                                <input type="date" class="date-input" name="date_from" value="<?php echo htmlspecialchars($date_from); ?>">
-                            </div>
-                            
-                            <div class="filter-group">
-                                <label>Date To</label>
-                                <input type="date" class="date-input" name="date_to" value="<?php echo htmlspecialchars($date_to); ?>">
-                            </div>
-                            
-                            <div class="search-bar">
-                                <i class="fas fa-search"></i>
-                                <input type="text" name="search" placeholder="Search transactions..." value="<?php echo htmlspecialchars($search_query); ?>">
-                            </div>
-                            
-                            <div class="filter-buttons">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-filter"></i> Apply Filters
-                                </button>
-                                
-                                <a href="transaction.php" class="btn btn-secondary">
-                                    <i class="fas fa-times"></i> Clear Filters
-                                </a>
-                            </div>
-                        </div>
-                    </form>
-                    
-                    <!-- Transaction Table -->
-                    <div style="overflow-x: auto;">
-                        <table class="transaction-table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Date of Transacation</th>
-                                    <th>Type</th>
-                                    <th>Details</th>
-                                    <th>Status</th>
-                                    <th>Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (mysqli_num_rows($result) > 0): ?>
-                                    <?php while ($transaction = mysqli_fetch_assoc($result)): ?>
-                                        <tr>
-                                            <td class="transaction-id">#<?php echo htmlspecialchars($transaction['transaction_id']); ?></td>
-                                            <td>
-                                                <?php echo date('M j, Y', strtotime($transaction['transaction_date'])); ?>
-                                            
-                                            </td>
-                                            <td>
-                                                <?php 
-                                                $type_icon = '';
-                                                switch($transaction['transaction_type']) {
-                                                    case 'Pickup': $type_icon = 'fa-truck'; break;
-                                                    case 'Walk-in': $type_icon = 'fa-walking'; break;
-                                                    case 'Loyalty': $type_icon = 'fa-award'; break;
-                                                    default: $type_icon = 'fa-exchange-alt';
-                                                }
-                                                ?>
-                                                <i class="fas <?php echo $type_icon; ?>" style="margin-right: 8px; color: var(--icon-green);"></i>
-                                                <?php echo htmlspecialchars($transaction['transaction_type']); ?>
-                                            </td>
-                                            <td>
-                                                <?php echo htmlspecialchars($transaction['item_details']); ?>
-                                                <?php if (!empty($transaction['additional_info'])): ?>
-                                                    <div class="transaction-items">
-                                                        <?php echo htmlspecialchars($transaction['additional_info']); ?>
-                                                    </div>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td>
-                                                <?php 
-                                                $status_class = 'status-' . strtolower($transaction['status']);
-                                                $status_icon = '';
-                                                switch($transaction['status']) {
-                                                    case 'Completed': $status_icon = 'fa-check-circle'; break;
-                                                    case 'Pending': $status_icon = 'fa-clock'; break;
-                                                    case 'Cancelled': $status_icon = 'fa-times-circle'; break;
-                                                }
-                                                echo '<span class="transaction-status ' . $status_class . '">' . 
-                                                     '<i class="fas ' . $status_icon . '"></i>' . 
-                                                     htmlspecialchars($transaction['status']) . '</span>';
-                                                ?>
-                                            </td>
-                                            <td class="transaction-amount" style="color: <?php 
-                                                echo ($transaction['transaction_type'] == 'Loyalty') ? 'var(--sales-orange)' : 'var(--icon-green)';
-                                            ?>;">
-                                                +₱<?php echo number_format($transaction['amount'], 2); ?>
-                                            </td>
-                                        </tr>
-                                    <?php endwhile; ?>
-                                <?php else: ?>
-                                    <tr>
-                                        <td colspan="6" class="no-transactions">
-                                            <i class="fas fa-info-circle"></i>
-                                            <p>No transactions found</p>
-                                            <?php if (!empty($type_filter) || !empty($status_filter) || !empty($date_from) || !empty($search_query)): ?>
-                                                <p>Try adjusting your filters or <a href="transaction.php" style="color: var(--icon-green);">clear all filters</a></p>
-                                            <?php endif; ?>
-                                        </td>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <!-- Pagination -->
-                    <?php if ($total_pages > 1): ?>
-                        <div class="pagination">
-                            <?php if ($current_page > 1): ?>
-                                <a href="?<?php echo http_build_query(array_merge($_GET, ['page' => 1])); ?>" class="page-btn" title="First Page">
-                                    <i class="fas fa-angle-double-left"></i>
-                                </a>
-                                <a href="?<?php echo http_build_query(array_merge($_GET, ['page' => $current_page - 1])); ?>" class="page-btn" title="Previous Page">
-                                    <i class="fas fa-angle-left"></i>
-                                </a>
-                            <?php endif; ?>
-                            
-                            <?php 
-                            // Show page numbers
-                            $start_page = max(1, $current_page - 2);
-                            $end_page = min($total_pages, $current_page + 2);
-                            
-                            if ($start_page > 1) {
-                                echo '<a href="?' . http_build_query(array_merge($_GET, ['page' => 1])) . '" class="page-btn">1</a>';
-                                if ($start_page > 2) {
-                                    echo '<span class="page-dots">...</span>';
-                                }
-                            }
-                            
-                            for ($i = $start_page; $i <= $end_page; $i++) {
-                                $active = ($i == $current_page) ? 'active' : '';
-                                echo '<a href="?' . http_build_query(array_merge($_GET, ['page' => $i])) . '" class="page-btn ' . $active . '">' . $i . '</a>';
-                            }
-                            
-                            if ($end_page < $total_pages) {
-                                if ($end_page < $total_pages - 1) {
-                                    echo '<span class="page-dots">...</span>';
-                                }
-                                echo '<a href="?' . http_build_query(array_merge($_GET, ['page' => $total_pages])) . '" class="page-btn">' . $total_pages . '</a>';
-                            }
-                            ?>
-                            
-                            <?php if ($current_page < $total_pages): ?>
-                                <a href="?<?php echo http_build_query(array_merge($_GET, ['page' => $current_page + 1])); ?>" class="page-btn" title="Next Page">
-                                    <i class="fas fa-angle-right"></i>
-                                </a>
-                                <a href="?<?php echo http_build_query(array_merge($_GET, ['page' => $total_pages])); ?>" class="page-btn" title="Last Page">
-                                    <i class="fas fa-angle-double-right"></i>
-                                </a>
-                            <?php endif; ?>
-                        </div>
-                    <?php endif; ?>
-                </div>
-            </div>
+        
+        <ul class="nav-menu">
+            <li><a href="index.php"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="#" class="active"><i class="fas fa-history"></i> Transaction History</a></li>
+            <li><a href="schedule.php"><i class="fas fa-calendar-alt"></i> Schedule Pickup</a></li>
+            <li><a href="prices.php"><i class="fas fa-coins"></i> Current Prices</a></li>
+            <li><a href="rewards.php"><i class="fas fa-award"></i> Loyalty Rewards</a></li>
+            <li><a href="settings.php"><i class="fas fa-user-cog"></i> Account Settings</a></li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <a href="login/login.php" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
         </div>
     </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1 class="page-title">Transaction History</h1>
+            <div class="notification-bell">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </div>
+        </div>
+        
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-history"></i> Your Transactions</h3>
+                <button class="export-btn">
+                    <i class="fas fa-download"></i> Export
+                </button>
+            </div>
+            
+            <!-- Filters -->
+            <form method="GET" action="">
+                <input type="hidden" name="page" value="1"> <!-- Reset to page 1 when filters change -->
+                <div class="transaction-filters">
+                    <div class="filter-group">
+                        <label>Transaction Type</label>
+                        <select name="type">
+                            <option value="">All Types</option>
+                            <option value="Pickup" <?php echo ($type_filter == 'Pickup') ? 'selected' : ''; ?>>Pickups</option>
+                            <option value="Walk-in" <?php echo ($type_filter == 'Walk-in') ? 'selected' : ''; ?>>Walk-in Sales</option>
+                            <option value="Loyalty" <?php echo ($type_filter == 'Loyalty') ? 'selected' : ''; ?>>Loyalty Rewards</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="">All Statuses</option>
+                            <option value="Completed" <?php echo ($status_filter == 'Completed') ? 'selected' : ''; ?>>Completed</option>
+                            <option value="Pending" <?php echo ($status_filter == 'Pending') ? 'selected' : ''; ?>>Pending</option>
+                            <option value="Cancelled" <?php echo ($status_filter == 'Cancelled') ? 'selected' : ''; ?>>Cancelled</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Date From</label>
+                        <input type="date" class="date-input" name="date_from" value="<?php echo htmlspecialchars($date_from); ?>">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Date To</label>
+                        <input type="date" class="date-input" name="date_to" value="<?php echo htmlspecialchars($date_to); ?>">
+                    </div>
+                    
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" name="search" placeholder="Search transactions..." value="<?php echo htmlspecialchars($search_query); ?>">
+                    </div>
+                    
+                    <div class="filter-buttons">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-filter"></i> Apply Filters
+                        </button>
+                        
+                        <a href="transaction.php" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Clear Filters
+                        </a>
+                    </div>
+                </div>
+            </form>
+            
+            <!-- Transaction Table -->
+            <div style="overflow-x: auto;">
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date of Transacation</th>
+                            <th>Type</th>
+                            <th>Details</th>
+                            <th>Status</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (mysqli_num_rows($result) > 0): ?>
+                            <?php while ($transaction = mysqli_fetch_assoc($result)): ?>
+                                <tr>
+                                    <td class="transaction-id">#<?php echo htmlspecialchars($transaction['transaction_id']); ?></td>
+                                    <td>
+                                        <?php echo date('M j, Y', strtotime($transaction['transaction_date'])); ?>
+                                    
+                                    </td>
+                                    <td>
+                                        <?php 
+                                        $type_icon = '';
+                                        switch($transaction['transaction_type']) {
+                                            case 'Pickup': $type_icon = 'fa-truck'; break;
+                                            case 'Walk-in': $type_icon = 'fa-walking'; break;
+                                            case 'Loyalty': $type_icon = 'fa-award'; break;
+                                            default: $type_icon = 'fa-exchange-alt';
+                                        }
+                                        ?>
+                                        <i class="fas <?php echo $type_icon; ?>" style="margin-right: 8px; color: var(--icon-green);"></i>
+                                        <?php echo htmlspecialchars($transaction['transaction_type']); ?>
+                                    </td>
+                                    <td>
+                                        <?php echo htmlspecialchars($transaction['item_details']); ?>
+                                        <?php if (!empty($transaction['additional_info'])): ?>
+                                            <div class="transaction-items">
+                                                <?php echo htmlspecialchars($transaction['additional_info']); ?>
+                                            </div>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?php 
+                                        $status_class = 'status-' . strtolower($transaction['status']);
+                                        $status_icon = '';
+                                        switch($transaction['status']) {
+                                            case 'Completed': $status_icon = 'fa-check-circle'; break;
+                                            case 'Pending': $status_icon = 'fa-clock'; break;
+                                            case 'Cancelled': $status_icon = 'fa-times-circle'; break;
+                                        }
+                                        echo '<span class="transaction-status ' . $status_class . '">' . 
+                                             '<i class="fas ' . $status_icon . '"></i>' . 
+                                             htmlspecialchars($transaction['status']) . '</span>';
+                                        ?>
+                                    </td>
+                                    <td class="transaction-amount" style="color: <?php 
+                                        echo ($transaction['transaction_type'] == 'Loyalty') ? 'var(--sales-orange)' : 'var(--icon-green)';
+                                    ?>;">
+                                        +₱<?php echo number_format($transaction['amount'], 2); ?>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="6" class="empty-state">
+                                    <i class="fas fa-info-circle"></i>
+                                    <p>No transactions found</p>
+                                    <?php if (!empty($type_filter) || !empty($status_filter) || !empty($date_from) || !empty($search_query)): ?>
+                                        <p>Try adjusting your filters or <a href="transaction.php" style="color: var(--icon-green);">clear all filters</a></p>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            <?php if ($total_pages > 1): ?>
+                <div class="pagination">
+                    <?php if ($current_page > 1): ?>
+                        <a href="?<?php echo http_build_query(array_merge($_GET, ['page' => 1])); ?>" class="page-btn" title="First Page">
+                            <i class="fas fa-angle-double-left"></i>
+                        </a>
+                        <a href="?<?php echo http_build_query(array_merge($_GET, ['page' => $current_page - 1])); ?>" class="page-btn" title="Previous Page">
+                            <i class="fas fa-angle-left"></i>
+                        </a>
+                    <?php endif; ?>
+                    
+                    <?php 
+                    // Show page numbers
+                    $start_page = max(1, $current_page - 2);
+                    $end_page = min($total_pages, $current_page + 2);
+                    
+                    if ($start_page > 1) {
+                        echo '<a href="?' . http_build_query(array_merge($_GET, ['page' => 1])) . '" class="page-btn">1</a>';
+                        if ($start_page > 2) {
+                            echo '<span class="page-dots">...</span>';
+                        }
+                    }
+                    
+                    for ($i = $start_page; $i <= $end_page; $i++) {
+                        $active = ($i == $current_page) ? 'active' : '';
+                        echo '<a href="?' . http_build_query(array_merge($_GET, ['page' => $i])) . '" class="page-btn ' . $active . '">' . $i . '</a>';
+                    }
+                    
+                    if ($end_page < $total_pages) {
+                        if ($end_page < $total_pages - 1) {
+                            echo '<span class="page-dots">...</span>';
+                        }
+                        echo '<a href="?' . http_build_query(array_merge($_GET, ['page' => $total_pages])) . '" class="page-btn">' . $total_pages . '</a>';
+                    }
+                    ?>
+                    
+                    <?php if ($current_page < $total_pages): ?>
+                        <a href="?<?php echo http_build_query(array_merge($_GET, ['page' => $current_page + 1])); ?>" class="page-btn" title="Next Page">
+                            <i class="fas fa-angle-right"></i>
+                        </a>
+                        <a href="?<?php echo http_build_query(array_merge($_GET, ['page' => $total_pages])); ?>" class="page-btn" title="Last Page">
+                            <i class="fas fa-angle-double-right"></i>
+                        </a>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+    </script>
 </body>
 </html>
 <?php

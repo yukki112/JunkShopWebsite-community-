@@ -19,7 +19,7 @@ mysqli_stmt_bind_param($user_stmt, "i", $user_id);
 mysqli_stmt_execute($user_stmt);
 $user_result = mysqli_stmt_get_result($user_stmt);
 $user = mysqli_fetch_assoc($user_result);
-$user_name = $user['first_name'] . ' ' . $user['last_name'];
+$user_name = $user['last_name'] . ' ' . $user['first_name'];
 $user_initials = strtoupper(substr($user['first_name'], 0, 1) . substr($user['last_name'], 0, 1));
 $user_address = $user['address'] ?? ''; // Get the user's address
 
@@ -215,79 +215,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_pickup'])) {
             --text-dark: #2E2B29;
             --icon-green: #6A7F46;
             --icon-orange: #D97A41;
-            
-            --primary-color: var(--stock-green);
-            --secondary-color: var(--sales-orange);
-            --accent-color: var(--icon-green);
-            --dark-color: var(--topbar-brown);
-            --light-color: var(--panel-cream);
-            --text-color: var(--text-dark);
-            --text-light: #777;
+            --accent-blue: #4A89DC;
+            --sidebar-width: 280px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
             background-color: var(--bg-beige);
             color: var(--text-dark);
             line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        header {
-            background-color: var(--topbar-brown);
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            background-color: var(--sales-orange);
             color: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Sidebar - New Vibrant Design */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--topbar-brown) 0%, #2A2520 100%);
+            color: white;
+            padding: 30px 0;
             position: sticky;
             top: 0;
-            z-index: 100;
+            height: 100vh;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+            z-index: 10;
+            overflow-y: auto;
         }
 
-        .header-content {
+        .sidebar-header {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--panel-cream);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo::before {
-            content: "♻";
-            font-size: 28px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-info span {
-            font-weight: 500;
-            color: var(--panel-cream);
+            padding: 0 20px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
         }
 
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             background-color: var(--panel-cream);
             display: flex;
@@ -295,34 +286,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_pickup'])) {
             justify-content: center;
             font-weight: bold;
             color: var(--topbar-brown);
-            overflow: hidden;
+            font-size: 24px;
+            margin-bottom: 15px;
+            border: 3px solid var(--sales-orange);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
         }
 
         .user-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            border-radius: 50%;
         }
 
-        .dashboard {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 30px;
-            padding: 30px 0;
+        .user-name {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            text-align: center;
         }
 
-        .sidebar {
-            background-color: var(--panel-cream);
-            border-radius: 15px;
-            padding: 25px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            height: fit-content;
-            position: sticky;
-            top: 80px;
+        .user-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: var(--panel-cream);
+            opacity: 0.8;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background-color: #2ECC71;
+            border-radius: 50%;
         }
 
         .nav-menu {
             list-style: none;
+            padding: 0 15px;
         }
 
         .nav-menu li {
@@ -332,49 +340,167 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_pickup'])) {
         .nav-menu a {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 25px;
-            color: var(--text-dark);
+            gap: 15px;
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.8);
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s;
-            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-menu a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background-color: var(--sales-orange);
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            opacity: 0;
         }
 
         .nav-menu a:hover {
-            background-color: rgba(106, 127, 70, 0.1);
-            border-left-color: var(--icon-green);
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-menu a:hover::before {
+            transform: translateX(0);
+            opacity: 1;
         }
 
         .nav-menu a.active {
-            background-color: rgba(106, 127, 70, 0.15);
-            border-left-color: var(--icon-green);
-            color: var(--icon-green);
+            background-color: rgba(255,255,255,0.15);
+            color: white;
+            font-weight: 600;
+        }
+
+        .nav-menu a.active::before {
+            transform: translateX(0);
+            opacity: 1;
         }
 
         .nav-menu i {
             width: 20px;
             text-align: center;
             font-size: 18px;
+            color: var(--panel-cream);
         }
 
+        .nav-menu a.active i {
+            color: var(--sales-orange);
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content Area */
         .main-content {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
         }
 
-        .card {
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--topbar-brown);
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--sales-orange);
+            border-radius: 3px;
+        }
+
+        .notification-bell {
+            position: relative;
+            width: 40px;
+            height: 40px;
             background-color: white;
-            border-radius: 12px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .notification-bell:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            width: 18px;
+            height: 18px;
+            background-color: var(--sales-orange);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-card {
+            background-color: white;
+            border-radius: 15px;
             padding: 25px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            margin-bottom: 30px;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .card-header {
@@ -765,16 +891,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_pickup'])) {
         }
         
         /* Responsive styles */
-        @media (max-width: 1024px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
-            
+        @media (max-width: 1200px) {
             .sidebar {
-                position: static;
+                width: 240px;
             }
         }
-        
+
+        @media (max-width: 992px) {
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                transition: all 0.3s ease;
+            }
+            
+            .sidebar.active {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            
+            .mobile-menu-toggle {
+                display: flex;
+            }
+        }
+
         @media (max-width: 768px) {
             .material-row {
                 flex-direction: column;
@@ -803,7 +946,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_pickup'])) {
             }
         }
         
-        @media (max-width: 480px) {
+        @media (max-width: 576px) {
             .pickup-steps {
                 margin-bottom: 20px;
             }
@@ -816,7 +959,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_pickup'])) {
                 grid-template-columns: 1fr;
             }
             
-            .card {
+            .dashboard-card {
                 padding: 20px;
             }
             
@@ -827,246 +970,264 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_pickup'])) {
     </style>
 </head>
 <body>
-    <header>
-        <div class="container header-content">
-            <div class="logo">JunkValue</div>
-            <div class="user-info">
-                <span>Hello, <?php echo htmlspecialchars($user_name); ?>!</span>
-                <div class="user-avatar">
-                    <?php if (!empty($user['profile_image']) && file_exists($user['profile_image'])): ?>
-                        <img src="<?php echo htmlspecialchars($user['profile_image']); ?>" alt="Profile">
-                    <?php else: ?>
-                        <?php echo $user_initials; ?>
-                    <?php endif; ?>
-                </div>
+    <!-- Mobile Menu Toggle -->
+    <div class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="user-avatar">
+                <?php if (!empty($user['profile_image']) && file_exists($user['profile_image'])): ?>
+                    <img src="<?php echo htmlspecialchars($user['profile_image']); ?>" alt="Profile">
+                <?php else: ?>
+                    <?php echo $user_initials; ?>
+                <?php endif; ?>
+            </div>
+            <div class="user-name"><?php echo htmlspecialchars($user_name); ?></div>
+            <div class="user-status">
+                <span class="status-indicator"></span>
+                <span>Active</span>
             </div>
         </div>
-    </header>
+        
+        <ul class="nav-menu">
+            <li><a href="index.php"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="transaction.php"><i class="fas fa-history"></i> Transaction History</a></li>
+            <li><a href="#" class="active"><i class="fas fa-calendar-alt"></i> Schedule Pickup</a></li>
+            <li><a href="prices.php"><i class="fas fa-coins"></i> Current Prices</a></li>
+            <li><a href="rewards.php"><i class="fas fa-award"></i> Loyalty Rewards</a></li>
+            <li><a href="settings.php"><i class="fas fa-user-cog"></i> Account Settings</a></li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <a href="logout.php" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </div>
     
-    <div class="container">
-        <div class="dashboard">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <ul class="nav-menu">
-                    <li><a href="index.php"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="transaction.php"><i class="fas fa-history"></i> Transaction History</a></li>
-                    <li><a href="#" class="active"><i class="fas fa-calendar-alt"></i> Schedule Pickup</a></li>
-                    <li><a href="prices.php"><i class="fas fa-coins"></i> Current Prices</a></li>
-                    <li><a href="rewards.php"><i class="fas fa-award"></i> Loyalty Rewards</a></li>
-                    <li><a href="settings.php"><i class="fas fa-user-cog"></i> Account Settings</a></li>
-                    <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                </ul>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1 class="page-title">Schedule Pickup</h1>
+            <div class="notification-bell">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
             </div>
-            
-            <!-- Main Content -->
-            <div class="main-content">
-                <div class="card">
-                    <?php if ($success): ?>
-                        <div class="success-message">
-                            <h3><i class="fas fa-check-circle"></i> Pickup Scheduled Successfully!</h3>
-                            <p>Your junk pickup has been scheduled for <strong><?php echo htmlspecialchars($pickup_date); ?></strong> during <strong><?php echo htmlspecialchars($time_slot); ?></strong>.</p>
-                            <p>Estimated Value: <strong>₱<?php echo number_format($estimated_value, 2); ?></strong></p>
-                            <p>We'll send you a confirmation email with all the details and notify you when our collector is on the way.</p>
-                            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
-                                <a href="transaction.php" class="btn btn-primary">
-                                    <i class="fas fa-history"></i> View My Pickups
-                                </a>
-                                <a href="index.php" class="btn btn-outline">
-                                    <i class="fas fa-home"></i> Return to Dashboard
-                                </a>
-                            </div>
-                        </div>
-                    <?php else: ?>
-                        <?php if (!empty($errors)): ?>
-                            <div class="error-message">
-                                <?php foreach ($errors as $error): ?>
-                                    <p><i class="fas fa-exclamation-circle"></i> <?php echo htmlspecialchars($error); ?></p>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php endif; ?>
-                        
-                        <h2 style="margin-bottom: 20px; color: var(--text-dark); display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-calendar-alt" style="color: var(--icon-green);"></i> Schedule a Junk Pickup
-                        </h2>
-                        
-                        <!-- Step Progress -->
-                        <div class="pickup-steps">
-                            <div class="step-progress-bar">
-                                <div class="step-progress-fill" id="stepProgress"></div>
-                            </div>
-                            <div class="step active" id="step1">
-                                <div class="step-number">1</div>
-                                <div class="step-label">Materials</div>
-                            </div>
-                            <div class="step" id="step2">
-                                <div class="step-number">2</div>
-                                <div class="step-label">Time & Address</div>
-                            </div>
-                            <div class="step" id="step3">
-                                <div class="step-number">3</div>
-                                <div class="step-label">Confirmation</div>
-                            </div>
-                        </div>
-                        
-                        <form method="POST" id="pickupForm">
-                            <!-- Step 1: Materials -->
-                            <div class="pickup-form-section active" id="section1">
-                                <h3 style="margin-bottom: 20px; color: var(--text-dark);">What are you recycling?</h3>
-                                
-                                <div id="materialList">
-                                    <div class="material-row" data-index="0">
-                                        <select class="material-select" name="materials[0][id]" required>
-                                            <option value="">Select material</option>
-                                            <?php foreach ($materials as $material): ?>
-                                                <option value="<?php echo $material['id']; ?>" 
-                                                        data-price="<?php echo $material['unit_price']; ?>">
-                                                    <?php echo htmlspecialchars($material['material_option']); ?> (₱<?php echo number_format($material['unit_price'], 2); ?>/kg)
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                        <input type="number" class="material-quantity" name="materials[0][quantity]" 
-                                               placeholder="Weight (kg)" min="0.1" step="0.1" required>
-                                        <span class="material-value">₱0.00</span>
-                                        <span class="remove-material" style="visibility: hidden;">
-                                            <i class="fas fa-times"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                
-                                <div class="add-material" id="addMaterial">
-                                    <i class="fas fa-plus-circle"></i>
-                                    <span>Add another material</span>
-                                </div>
-                                
-                                <div class="pickup-summary" id="materialSummary">
-                                    <h4 style="margin-bottom: 15px; color: var(--text-dark);">Estimated Value</h4>
-                                    <div id="summaryItems">
-                                        <!-- Items will be added here by JavaScript -->
-                                    </div>
-                                    <div class="summary-total">
-                                        <span>Estimated Total</span>
-                                        <span id="estimatedTotal">₱0.00</span>
-                                    </div>
-                                    <p style="font-size: 14px; color: var(--text-light); margin-top: 15px;">
-                                        <i class="fas fa-info-circle"></i> Final amount may vary based on actual weight and quality at time of pickup.
-                                    </p>
-                                </div>
-                                
-                                <div class="form-actions">
-                                    <button class="btn btn-outline" disabled>Back</button>
-                                    <button class="btn btn-primary" type="button" id="continueButton" onclick="validateMaterials()">
-                                        <i class="fas fa-arrow-right"></i> Continue
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <!-- Step 2: Time & Address -->
-                            <div class="pickup-form-section" id="section2">
-                                <h3 style="margin-bottom: 20px; color: var(--text-dark);">When & Where?</h3>
-                                
-                                <div class="form-group">
-                                    <label>Pickup Date</label>
-                                    <input type="date" id="pickupDate" name="pickup_date" min="<?php echo date('Y-m-d'); ?>" required>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label>Time Slot</label>
-                                    <div class="time-slots">
-                                        <div class="time-slot" data-value="8:00 - 10:00 AM">8:00 - 10:00 AM</div>
-                                        <div class="time-slot selected" data-value="10:00 - 12:00 PM">10:00 - 12:00 PM</div>
-                                        <div class="time-slot" data-value="1:00 - 3:00 PM">1:00 - 3:00 PM</div>
-                                        <div class="time-slot" data-value="3:00 - 5:00 PM">3:00 - 5:00 PM</div>
-                                        <div class="time-slot disabled" data-value="5:00 - 7:00 PM">5:00 - 7:00 PM</div>
-                                    </div>
-                                    <input type="hidden" id="timeSlotInput" name="time_slot" value="10:00 - 12:00 PM" required>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label>Pickup Address</label>
-                                    <textarea id="pickupAddress" name="address" required><?php echo htmlspecialchars($user_address); ?></textarea>
-                                    <button type="button" id="useSavedAddress" class="btn btn-outline" style="margin-top: 10px; padding: 8px 15px; font-size: 13px;">
-                                        <i class="fas fa-undo"></i> Use my saved address
-                                    </button>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label>Special Instructions (Optional)</label>
-                                    <textarea id="specialInstructions" name="special_instructions" placeholder="E.g. Gate code, landmarks, specific location on property, etc."></textarea>
-                                </div>
-                                
-                                <div class="form-actions">
-                                    <button class="btn btn-outline" type="button" onclick="prevStep(2)">
-                                        <i class="fas fa-arrow-left"></i> Back
-                                    </button>
-                                    <button class="btn btn-primary" type="button" onclick="validateTimeAndAddress()">
-                                        <i class="fas fa-arrow-right"></i> Continue
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <!-- Step 3: Confirmation -->
-                            <div class="pickup-form-section" id="section3">
-                                <h3 style="margin-bottom: 20px; color: var(--text-dark);">Confirm Your Pickup</h3>
-                                
-                                <div class="pickup-summary">
-                                    <h4 style="margin-bottom: 20px; color: var(--text-dark);">Pickup Details</h4>
-                                    
-                                    <div class="summary-item">
-                                        <span><strong>Materials:</strong></span>
-                                        <span></span>
-                                    </div>
-                                    <div style="margin-left: 15px; margin-bottom: 15px;" id="confirmationMaterials">
-                                        <!-- Will be filled by JavaScript -->
-                                    </div>
-                                    
-                                    <div class="summary-item">
-                                        <span>Estimated Value:</span>
-                                        <span id="confirmationValue">₱0.00</span>
-                                    </div>
-                                    
-                                    <div class="summary-item">
-                                        <span>Pickup Date:</span>
-                                        <span id="confirmationDate"></span>
-                                    </div>
-                                    
-                                    <div class="summary-item">
-                                        <span>Time Slot:</span>
-                                        <span id="confirmationTime"></span>
-                                    </div>
-                                    
-                                    <div class="summary-item">
-                                        <span>Address:</span>
-                                        <span id="confirmationAddress" style="max-width: 300px; display: inline-block; text-align: right;"></span>
-                                    </div>
-                                    
-                                    <div class="summary-item">
-                                        <span>Special Instructions:</span>
-                                        <span id="confirmationInstructions" style="font-style: italic;"></span>
-                                    </div>
-                                </div>
-                                
-                                <div class="terms-checkbox">
-                                    <input type="checkbox" id="confirmTerms" name="confirm_terms" required>
-                                    <label for="confirmTerms">I agree to the <a href="terms.php">Terms of Service</a> and confirm that all materials listed are acceptable for recycling per our guidelines.</label>
-                                </div>
-                                
-                                <div class="form-actions">
-                                    <button class="btn btn-outline" type="button" onclick="prevStep(3)">
-                                        <i class="fas fa-arrow-left"></i> Back
-                                    </button>
-                                    <button class="btn btn-primary" id="confirmBtn" type="submit" name="confirm_pickup" disabled>
-                                        <i class="fas fa-calendar-check"></i> Confirm & Schedule Pickup
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    <?php endif; ?>
+        </div>
+        
+        <div class="dashboard-card">
+            <?php if ($success): ?>
+                <div class="success-message">
+                    <h3><i class="fas fa-check-circle"></i> Pickup Scheduled Successfully!</h3>
+                    <p>Your junk pickup has been scheduled for <strong><?php echo htmlspecialchars($pickup_date); ?></strong> during <strong><?php echo htmlspecialchars($time_slot); ?></strong>.</p>
+                    <p>Estimated Value: <strong>₱<?php echo number_format($estimated_value, 2); ?></strong></p>
+                    <p>We'll send you a confirmation email with all the details and notify you when our collector is on the way.</p>
+                    <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
+                        <a href="transaction.php" class="btn btn-primary">
+                            <i class="fas fa-history"></i> View My Pickups
+                        </a>
+                        <a href="index.php" class="btn btn-outline">
+                            <i class="fas fa-home"></i> Return to Dashboard
+                        </a>
+                    </div>
                 </div>
-            </div>
+            <?php else: ?>
+                <?php if (!empty($errors)): ?>
+                    <div class="error-message">
+                        <?php foreach ($errors as $error): ?>
+                            <p><i class="fas fa-exclamation-circle"></i> <?php echo htmlspecialchars($error); ?></p>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+                
+                <h2 style="margin-bottom: 20px; color: var(--text-dark); display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-calendar-alt" style="color: var(--icon-green);"></i> Schedule a Junk Pickup
+                </h2>
+                
+                <!-- Step Progress -->
+                <div class="pickup-steps">
+                    <div class="step-progress-bar">
+                        <div class="step-progress-fill" id="stepProgress"></div>
+                    </div>
+                    <div class="step active" id="step1">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Materials</div>
+                    </div>
+                    <div class="step" id="step2">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Time & Address</div>
+                    </div>
+                    <div class="step" id="step3">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Confirmation</div>
+                    </div>
+                </div>
+                
+                <form method="POST" id="pickupForm">
+                    <!-- Step 1: Materials -->
+                    <div class="pickup-form-section active" id="section1">
+                        <h3 style="margin-bottom: 20px; color: var(--text-dark);">What are you recycling?</h3>
+                        
+                        <div id="materialList">
+                            <div class="material-row" data-index="0">
+                                <select class="material-select" name="materials[0][id]" required>
+                                    <option value="">Select material</option>
+                                    <?php foreach ($materials as $material): ?>
+                                        <option value="<?php echo $material['id']; ?>" 
+                                                data-price="<?php echo $material['unit_price']; ?>">
+                                            <?php echo htmlspecialchars($material['material_option']); ?> (₱<?php echo number_format($material['unit_price'], 2); ?>/kg)
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <input type="number" class="material-quantity" name="materials[0][quantity]" 
+                                       placeholder="Weight (kg)" min="0.1" step="0.1" required>
+                                <span class="material-value">₱0.00</span>
+                                <span class="remove-material" style="visibility: hidden;">
+                                    <i class="fas fa-times"></i>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="add-material" id="addMaterial">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Add another material</span>
+                        </div>
+                        
+                        <div class="pickup-summary" id="materialSummary">
+                            <h4 style="margin-bottom: 15px; color: var(--text-dark);">Estimated Value</h4>
+                            <div id="summaryItems">
+                                <!-- Items will be added here by JavaScript -->
+                            </div>
+                            <div class="summary-total">
+                                <span>Estimated Total</span>
+                                <span id="estimatedTotal">₱0.00</span>
+                            </div>
+                            <p style="font-size: 14px; color: var(--text-dark); opacity: 0.7; margin-top: 15px;">
+                                <i class="fas fa-info-circle"></i> Final amount may vary based on actual weight and quality at time of pickup.
+                            </p>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button class="btn btn-outline" disabled>Back</button>
+                            <button class="btn btn-primary" type="button" id="continueButton" onclick="validateMaterials()">
+                                <i class="fas fa-arrow-right"></i> Continue
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 2: Time & Address -->
+                    <div class="pickup-form-section" id="section2">
+                        <h3 style="margin-bottom: 20px; color: var(--text-dark);">When & Where?</h3>
+                        
+                        <div class="form-group">
+                            <label>Pickup Date</label>
+                            <input type="date" id="pickupDate" name="pickup_date" min="<?php echo date('Y-m-d'); ?>" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Time Slot</label>
+                            <div class="time-slots">
+                                <div class="time-slot" data-value="8:00 - 10:00 AM">8:00 - 10:00 AM</div>
+                                <div class="time-slot selected" data-value="10:00 - 12:00 PM">10:00 - 12:00 PM</div>
+                                <div class="time-slot" data-value="1:00 - 3:00 PM">1:00 - 3:00 PM</div>
+                                <div class="time-slot" data-value="3:00 - 5:00 PM">3:00 - 5:00 PM</div>
+                                <div class="time-slot disabled" data-value="5:00 - 7:00 PM">5:00 - 7:00 PM</div>
+                            </div>
+                            <input type="hidden" id="timeSlotInput" name="time_slot" value="10:00 - 12:00 PM" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Pickup Address</label>
+                            <textarea id="pickupAddress" name="address" required><?php echo htmlspecialchars($user_address); ?></textarea>
+                            <button type="button" id="useSavedAddress" class="btn btn-outline" style="margin-top: 10px; padding: 8px 15px; font-size: 13px;">
+                                <i class="fas fa-undo"></i> Use my saved address
+                            </button>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Special Instructions (Optional)</label>
+                            <textarea id="specialInstructions" name="special_instructions" placeholder="E.g. Gate code, landmarks, specific location on property, etc."></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button class="btn btn-outline" type="button" onclick="prevStep(2)">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </button>
+                            <button class="btn btn-primary" type="button" onclick="validateTimeAndAddress()">
+                                <i class="fas fa-arrow-right"></i> Continue
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3: Confirmation -->
+                    <div class="pickup-form-section" id="section3">
+                        <h3 style="margin-bottom: 20px; color: var(--text-dark);">Confirm Your Pickup</h3>
+                        
+                        <div class="pickup-summary">
+                            <h4 style="margin-bottom: 20px; color: var(--text-dark);">Pickup Details</h4>
+                            
+                            <div class="summary-item">
+                                <span><strong>Materials:</strong></span>
+                                <span></span>
+                            </div>
+                            <div style="margin-left: 15px; margin-bottom: 15px;" id="confirmationMaterials">
+                                <!-- Will be filled by JavaScript -->
+                            </div>
+                            
+                            <div class="summary-item">
+                                <span>Estimated Value:</span>
+                                <span id="confirmationValue">₱0.00</span>
+                            </div>
+                            
+                            <div class="summary-item">
+                                <span>Pickup Date:</span>
+                                <span id="confirmationDate"></span>
+                            </div>
+                            
+                            <div class="summary-item">
+                                <span>Time Slot:</span>
+                                <span id="confirmationTime"></span>
+                            </div>
+                            
+                            <div class="summary-item">
+                                <span>Address:</span>
+                                <span id="confirmationAddress" style="max-width: 300px; display: inline-block; text-align: right;"></span>
+                            </div>
+                            
+                            <div class="summary-item">
+                                <span>Special Instructions:</span>
+                                <span id="confirmationInstructions" style="font-style: italic;"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="terms-checkbox">
+                            <input type="checkbox" id="confirmTerms" name="confirm_terms" required>
+                            <label for="confirmTerms">I agree to the <a href="terms.php">Terms of Service</a> and confirm that all materials listed are acceptable for recycling per our guidelines.</label>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button class="btn btn-outline" type="button" onclick="prevStep(3)">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </button>
+                            <button class="btn btn-primary" id="confirmBtn" type="submit" name="confirm_pickup" disabled>
+                                <i class="fas fa-calendar-check"></i> Confirm & Schedule Pickup
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            <?php endif; ?>
         </div>
     </div>
 
     <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+        
         // Set minimum date to today
         document.getElementById('pickupDate').min = new Date().toISOString().split('T')[0];
         

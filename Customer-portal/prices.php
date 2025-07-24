@@ -19,7 +19,7 @@ mysqli_stmt_bind_param($user_stmt, "i", $user_id);
 mysqli_stmt_execute($user_stmt);
 $user_result = mysqli_stmt_get_result($user_stmt);
 $user = mysqli_fetch_assoc($user_result);
-$user_name = $user['first_name'] . ' ' . $user['last_name'];
+$user_name = $user['last_name'] . ' ' . $user['first_name'];
 $user_initials = strtoupper(substr($user['first_name'], 0, 1) . substr($user['last_name'], 0, 1));
 
 // Get current prices from database
@@ -115,79 +115,51 @@ mysqli_close($conn);
             --text-dark: #2E2B29;
             --icon-green: #6A7F46;
             --icon-orange: #D97A41;
-            
-            --primary-color: var(--stock-green);
-            --secondary-color: var(--sales-orange);
-            --accent-color: var(--icon-green);
-            --dark-color: var(--topbar-brown);
-            --light-color: var(--panel-cream);
-            --text-color: var(--text-dark);
-            --text-light: #777;
+            --accent-blue: #4A89DC;
+            --sidebar-width: 280px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
             background-color: var(--bg-beige);
             color: var(--text-dark);
             line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        header {
-            background-color: var(--topbar-brown);
+        /* Sidebar - New Vibrant Design */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--topbar-brown) 0%, #2A2520 100%);
             color: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px 0;
             position: sticky;
             top: 0;
-            z-index: 100;
+            height: 100vh;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+            z-index: 10;
+            overflow-y: auto;
         }
 
-        .header-content {
+        .sidebar-header {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--panel-cream);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo::before {
-            content: "♻";
-            font-size: 28px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-info span {
-            font-weight: 500;
-            color: var(--panel-cream);
+            padding: 0 20px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
         }
 
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             background-color: var(--panel-cream);
             display: flex;
@@ -195,34 +167,51 @@ mysqli_close($conn);
             justify-content: center;
             font-weight: bold;
             color: var(--topbar-brown);
-            overflow: hidden;
+            font-size: 24px;
+            margin-bottom: 15px;
+            border: 3px solid var(--sales-orange);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
         }
 
         .user-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            border-radius: 50%;
         }
 
-        .dashboard {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 30px;
-            padding: 30px 0;
+        .user-name {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            text-align: center;
         }
 
-        .sidebar {
-            background-color: var(--panel-cream);
-            border-radius: 15px;
-            padding: 25px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            height: fit-content;
-            position: sticky;
-            top: 80px;
+        .user-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: var(--panel-cream);
+            opacity: 0.8;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background-color: #2ECC71;
+            border-radius: 50%;
         }
 
         .nav-menu {
             list-style: none;
+            padding: 0 15px;
         }
 
         .nav-menu li {
@@ -232,89 +221,249 @@ mysqli_close($conn);
         .nav-menu a {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 25px;
-            color: var(--text-dark);
+            gap: 15px;
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.8);
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s;
-            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-menu a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background-color: var(--sales-orange);
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            opacity: 0;
         }
 
         .nav-menu a:hover {
-            background-color: rgba(106, 127, 70, 0.1);
-            border-left-color: var(--icon-green);
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-menu a:hover::before {
+            transform: translateX(0);
+            opacity: 1;
         }
 
         .nav-menu a.active {
-            background-color: rgba(106, 127, 70, 0.15);
-            border-left-color: var(--icon-green);
-            color: var(--icon-green);
+            background-color: rgba(255,255,255,0.15);
+            color: white;
+            font-weight: 600;
+        }
+
+        .nav-menu a.active::before {
+            transform: translateX(0);
+            opacity: 1;
         }
 
         .nav-menu i {
             width: 20px;
             text-align: center;
             font-size: 18px;
+            color: var(--panel-cream);
         }
 
+        .nav-menu a.active i {
+            color: var(--sales-orange);
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content Area */
         .main-content {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
         }
 
-        .card {
-            background-color: white;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Prices Page Specific Styles */
-        .price-header {
+        /* Header */
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
+            margin-bottom: 30px;
         }
-        
-        .price-tabs {
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--topbar-brown);
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--sales-orange);
+            border-radius: 3px;
+        }
+
+        .notification-bell {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 50%;
             display: flex;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-            margin-bottom: 25px;
-            gap: 5px;
-        }
-        
-        .price-tab {
-            padding: 12px 25px;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
             cursor: pointer;
-            border-bottom: 3px solid transparent;
-            font-weight: 500;
-            color: var(--text-light);
-            transition: all 0.3s;
-            border-radius: 5px 5px 0 0;
+            transition: all 0.3s ease;
         }
-        
-        .price-tab:hover {
-            background-color: rgba(106, 127, 70, 0.05);
+
+        .notification-bell:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            width: 18px;
+            height: 18px;
+            background-color: var(--sales-orange);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
             color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        
-        .price-tab.active {
-            border-bottom-color: var(--icon-green);
+
+        .card-title i {
             color: var(--icon-green);
-            background-color: rgba(106, 127, 70, 0.05);
         }
-        
+
+        .view-all {
+            color: var(--icon-green);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .view-all:hover {
+            color: var(--sales-orange);
+            transform: translateX(3px);
+        }
+
+        /* Price Table */
+        .price-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .price-table thead {
+            position: sticky;
+            top: 0;
+        }
+
+        .price-table th {
+            background-color: rgba(106, 127, 70, 0.08);
+            font-weight: 600;
+            color: var(--icon-green);
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 2px solid rgba(106, 127, 70, 0.2);
+        }
+
+        .price-table td {
+            padding: 14px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .price-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .price-table tr:hover td {
+            background-color: rgba(106, 127, 70, 0.03);
+        }
+
+        .trend-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Price Cards */
         .price-cards {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -375,12 +524,14 @@ mysqli_close($conn);
         }
         
         .price-change.neutral {
-            color: var(--text-light);
+            color: var(--text-dark);
+            opacity: 0.7;
         }
         
         .price-meta {
             font-size: 14px;
-            color: var(--text-light);
+            color: var(--text-dark);
+            opacity: 0.7;
             margin-top: 15px;
             border-top: 1px solid rgba(0,0,0,0.05);
             padding-top: 15px;
@@ -403,7 +554,8 @@ mysqli_close($conn);
             font-weight: 500;
             color: var(--text-dark);
         }
-        
+
+        /* Price History Chart */
         .price-history-chart {
             height: 400px;
             background-color: white;
@@ -455,7 +607,8 @@ mysqli_close($conn);
             height: 14px;
             border-radius: 3px;
         }
-        
+
+        /* Price Alert */
         .price-alert {
             display: flex;
             align-items: center;
@@ -485,8 +638,10 @@ mysqli_close($conn);
         .price-alert-text {
             font-size: 14px;
             color: var(--text-dark);
+            opacity: 0.8;
         }
-        
+
+        /* Price Table Container */
         .price-table-container {
             overflow-x: auto;
             margin-top: 25px;
@@ -494,43 +649,8 @@ mysqli_close($conn);
             border: 1px solid rgba(0,0,0,0.05);
             box-shadow: 0 2px 5px rgba(0,0,0,0.03);
         }
-        
-        .price-table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 800px;
-        }
-        
-        .price-table th {
-            background-color: rgba(106, 127, 70, 0.05);
-            padding: 14px 16px;
-            text-align: left;
-            font-weight: 600;
-            color: var(--icon-green);
-            font-size: 14px;
-            border-bottom: 2px solid rgba(0,0,0,0.05);
-        }
-        
-        .price-table td {
-            padding: 14px 16px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            font-size: 14px;
-        }
-        
-        .price-table tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .price-table tr:hover {
-            background-color: rgba(106, 127, 70, 0.03);
-        }
-        
-        .trend-cell {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
+
+        /* Subscribe Form */
         .subscribe-form {
             display: flex;
             gap: 10px;
@@ -567,7 +687,8 @@ mysqli_close($conn);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(106, 127, 70, 0.4);
         }
-        
+
+        /* Material Icon */
         .material-icon {
             width: 36px;
             height: 36px;
@@ -577,71 +698,103 @@ mysqli_close($conn);
             justify-content: center;
             color: white;
         }
-        
-        /* Responsive styles */
-        @media (max-width: 1024px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
-            
-            .sidebar {
-                position: static;
-            }
-            
-            .price-history-chart {
-                height: 350px;
-                padding: 20px;
-            }
+
+        /* Price Tabs */
+        .price-tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            gap: 5px;
         }
         
+        .price-tab {
+            padding: 12px 25px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            color: var(--text-dark);
+            opacity: 0.7;
+            transition: all 0.3s;
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .price-tab:hover {
+            background-color: rgba(106, 127, 70, 0.05);
+            opacity: 1;
+        }
+        
+        .price-tab.active {
+            border-bottom-color: var(--icon-green);
+            color: var(--icon-green);
+            background-color: rgba(106, 127, 70, 0.05);
+            opacity: 1;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            background-color: var(--sales-orange);
+            color: white;
+            border-radius: 8px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Responsive styles */
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 240px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                transition: all 0.3s ease;
+            }
+            
+            .sidebar.active {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            
+            .mobile-menu-toggle {
+                display: flex;
+            }
+        }
+
         @media (max-width: 768px) {
             .price-cards {
                 grid-template-columns: 1fr 1fr;
             }
             
-            .price-header {
-                flex-direction: column;
-                align-items: flex-start;
+            .price-history-chart {
+                height: 350px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .price-cards {
+                grid-template-columns: 1fr;
             }
             
             .price-history-chart {
                 height: 300px;
                 padding: 15px;
-            }
-            
-            .price-card h3 {
-                font-size: 16px;
-            }
-            
-            .price-value {
-                font-size: 24px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .price-cards {
-                grid-template-columns: 1fr;
-            }
-            
-            .price-tabs {
-                overflow-x: auto;
-                padding-bottom: 5px;
-            }
-            
-            .price-tab {
-                padding: 10px 15px;
-                white-space: nowrap;
-            }
-            
-            .price-history-chart {
-                height: 250px;
-                padding: 10px;
-            }
-            
-            .price-alert {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
             }
             
             .subscribe-form {
@@ -661,233 +814,250 @@ mysqli_close($conn);
     </style>
 </head>
 <body>
-    <header>
-        <div class="container header-content">
-            <div class="logo">JunkValue</div>
-            <div class="user-info">
-                <span>Hello, <?php echo htmlspecialchars($user_name); ?>!</span>
-                <div class="user-avatar">
-                    <?php if (!empty($user['profile_image']) && file_exists($user['profile_image'])): ?>
-                        <img src="<?php echo htmlspecialchars($user['profile_image']); ?>" alt="Profile">
-                    <?php else: ?>
-                        <?php echo $user_initials; ?>
-                    <?php endif; ?>
-                </div>
+    <!-- Mobile Menu Toggle -->
+    <div class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="user-avatar">
+                <?php if (!empty($user['profile_image']) && file_exists($user['profile_image'])): ?>
+                    <img src="<?php echo htmlspecialchars($user['profile_image']); ?>" alt="Profile">
+                <?php else: ?>
+                    <?php echo $user_initials; ?>
+                <?php endif; ?>
+            </div>
+            <div class="user-name"><?php echo htmlspecialchars($user_name); ?></div>
+            <div class="user-status">
+                <span class="status-indicator"></span>
+                <span>Active</span>
             </div>
         </div>
-    </header>
+        
+        <ul class="nav-menu">
+            <li><a href="index.php"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="transaction.php"><i class="fas fa-history"></i> Transaction History</a></li>
+            <li><a href="schedule.php"><i class="fas fa-calendar-alt"></i> Schedule Pickup</a></li>
+            <li><a href="#" class="active"><i class="fas fa-coins"></i> Current Prices</a></li>
+            <li><a href="rewards.php"><i class="fas fa-award"></i> Loyalty Rewards</a></li>
+            <li><a href="settings.php"><i class="fas fa-user-cog"></i> Account Settings</a></li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <a href="logout.php" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </div>
     
-    <div class="container">
-        <div class="dashboard">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <ul class="nav-menu">
-                    <li><a href="index.php"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="transaction.php"><i class="fas fa-history"></i> Transaction History</a></li>
-                    <li><a href="schedule.php"><i class="fas fa-calendar-alt"></i> Schedule Pickup</a></li>
-                    <li><a href="#" class="active"><i class="fas fa-coins"></i> Current Prices</a></li>
-                    <li><a href="rewards.php"><i class="fas fa-award"></i> Loyalty Rewards</a></li>
-                    <li><a href="settings.php"><i class="fas fa-user-cog"></i> Account Settings</a></li>
-                    <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                </ul>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1 class="page-title">Current Prices</h1>
+            <div class="notification-bell">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </div>
+        </div>
+        
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-coins"></i> Today's Scrap Prices</h3>
+                <span style="color: var(--text-dark); opacity: 0.7; font-size: 14px;">
+                    <i class="fas fa-sync-alt"></i> Updated: <?php echo date('F j, Y g:i A'); ?>
+                </span>
             </div>
             
-            <!-- Main Content -->
-            <div class="main-content">
-                <div class="card">
-                    <div class="price-header">
-                        <h2 style="color: var(--text-dark); display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-coins" style="color: var(--icon-green);"></i> Current Scrap Prices
-                        </h2>
-                        <div style="display: flex; align-items: center; gap: 15px;">
-                            <span style="color: var(--text-light); font-size: 14px;">
-                                <i class="fas fa-sync-alt"></i> Updated: <?php echo date('F j, Y g:i A'); ?>
-                            </span>
-                            <button class="btn" style="background: rgba(106, 127, 70, 0.1); color: var(--icon-green); padding: 8px 15px; border-radius: 8px; border: none; display: flex; align-items: center; gap: 8px;">
-                                <i class="fas fa-bell"></i> Price Alerts
-                            </button>
+            <div class="price-tabs">
+                <div class="price-tab active">All Materials</div>
+                <div class="price-tab">Metals</div>
+                <div class="price-tab">E-Waste</div>
+                <div class="price-tab">Plastics</div>
+                <div class="price-tab">Paper</div>
+            </div>
+            
+            <!-- Price Cards -->
+            <div class="price-cards">
+                <?php foreach ($prices as $material): 
+                    $history = $price_history[$material['id']];
+                    $trend_class = $history['trend'] === 'up' ? 'up' : ($history['trend'] === 'down' ? 'down' : 'neutral');
+                    $trend_icon = $history['trend'] === 'up' ? 'fa-arrow-up' : ($history['trend'] === 'down' ? 'fa-arrow-down' : 'fa-equals');
+                    $icon_color = $history['color'];
+                    
+                    // Set icons based on material type
+                    $material_icon = '';
+                    switch(true) {
+                        case strpos($material['material_option'], 'Copper') !== false:
+                            $material_icon = 'fa-bolt';
+                            break;
+                        case strpos($material['material_option'], 'Aluminum') !== false:
+                            $material_icon = 'fa-cubes';
+                            break;
+                        case strpos($material['material_option'], 'Iron') !== false:
+                            $material_icon = 'fa-weight-hanging';
+                            break;
+                        case strpos($material['material_option'], 'E-Waste') !== false:
+                            $material_icon = 'fa-microchip';
+                            break;
+                        case strpos($material['material_option'], 'Steel') !== false:
+                            $material_icon = 'fa-industry';
+                            break;
+                        default:
+                            $material_icon = 'fa-box';
+                    }
+                ?>
+                <div class="price-card" style="border-top-color: <?php echo $icon_color; ?>">
+                    <div class="material-icon" style="background-color: <?php echo $icon_color; ?>">
+                        <i class="fas <?php echo $material_icon; ?>"></i>
+                    </div>
+                    <h3><?php echo htmlspecialchars($material['material_option']); ?></h3>
+                    <div class="price-value">₱<?php echo number_format($material['unit_price'], 2); ?>/kg</div>
+                    <div class="price-change <?php echo $trend_class; ?>">
+                        <i class="fas <?php echo $trend_icon; ?>"></i>
+                        <span>
+                            <?php if ($history['trend'] !== 'equal'): ?>
+                                <?php echo $history['trend'] === 'up' ? '+' : '-'; ?>
+                            <?php endif; ?>
+                            ₱<?php echo number_format($history['change_amount'], 2); ?> 
+                            (<?php echo number_format($history['change_percent'], 1); ?>%)
+                        </span>
+                    </div>
+                    <div class="price-meta">
+                        <div class="price-meta-item">
+                            <span class="price-meta-label">Weekly High</span>
+                            <span class="price-meta-value">₱<?php echo number_format($history['weekly_high'], 2); ?></span>
+                        </div>
+                        <div class="price-meta-item">
+                            <span class="price-meta-label">Monthly Avg</span>
+                            <span class="price-meta-value">₱<?php echo number_format($history['monthly_avg'], 2); ?></span>
                         </div>
                     </div>
-                    
-                    <div class="price-tabs">
-                        <div class="price-tab active">All Materials</div>
-                        <div class="price-tab">Metals</div>
-                        <div class="price-tab">E-Waste</div>
-                        <div class="price-tab">Plastics</div>
-                        <div class="price-tab">Paper</div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            
+            <!-- Price History Chart -->
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-chart-line"></i> Price Trends (Last 30 Days)</h3>
+                <a href="#" class="view-all">
+                    View Full History <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="price-history-chart">
+                <div class="chart-container">
+                    <canvas id="priceHistoryChart"></canvas>
+                </div>
+                <div class="chart-legend" id="chartLegend"></div>
+            </div>
+            
+            <!-- Price Alert -->
+            <div class="price-alert">
+                <i class="fas fa-exclamation-circle"></i>
+                <div class="price-alert-content">
+                    <div class="price-alert-title">Market Alert</div>
+                    <div class="price-alert-text">
+                        Copper prices have increased 12% this month due to high demand. Consider selling your copper scrap now to maximize your earnings.
                     </div>
-                    
-                    <!-- Price Cards -->
-                    <div class="price-cards">
-                        <?php foreach ($prices as $material): 
-                            $history = $price_history[$material['id']];
-                            $trend_class = $history['trend'] === 'up' ? 'up' : ($history['trend'] === 'down' ? 'down' : 'neutral');
-                            $trend_icon = $history['trend'] === 'up' ? 'fa-arrow-up' : ($history['trend'] === 'down' ? 'fa-arrow-down' : 'fa-equals');
-                            $icon_color = $history['color'];
-                            
-                            // Set icons based on material type
-                            $material_icon = '';
-                            switch(true) {
-                                case strpos($material['material_option'], 'Copper') !== false:
-                                    $material_icon = 'fa-bolt';
-                                    break;
-                                case strpos($material['material_option'], 'Aluminum') !== false:
-                                    $material_icon = 'fa-cubes';
-                                    break;
-                                case strpos($material['material_option'], 'Iron') !== false:
-                                    $material_icon = 'fa-weight-hanging';
-                                    break;
-                                case strpos($material['material_option'], 'E-Waste') !== false:
-                                    $material_icon = 'fa-microchip';
-                                    break;
-                                case strpos($material['material_option'], 'Steel') !== false:
-                                    $material_icon = 'fa-industry';
-                                    break;
-                                default:
-                                    $material_icon = 'fa-box';
-                            }
-                        ?>
-                        <div class="price-card" style="border-top-color: <?php echo $icon_color; ?>">
-                            <div class="material-icon" style="background-color: <?php echo $icon_color; ?>">
-                                <i class="fas <?php echo $material_icon; ?>"></i>
-                            </div>
-                            <h3><?php echo htmlspecialchars($material['material_option']); ?></h3>
-                            <div class="price-value">₱<?php echo number_format($material['unit_price'], 2); ?>/kg</div>
-                            <div class="price-change <?php echo $trend_class; ?>">
-                                <i class="fas <?php echo $trend_icon; ?>"></i>
-                                <span>
-                                    <?php if ($history['trend'] !== 'equal'): ?>
-                                        <?php echo $history['trend'] === 'up' ? '+' : '-'; ?>
-                                    <?php endif; ?>
-                                    ₱<?php echo number_format($history['change_amount'], 2); ?> 
-                                    (<?php echo number_format($history['change_percent'], 1); ?>%)
-                                </span>
-                            </div>
-                            <div class="price-meta">
-                                <div class="price-meta-item">
-                                    <span class="price-meta-label">Weekly High</span>
-                                    <span class="price-meta-value">₱<?php echo number_format($history['weekly_high'], 2); ?></span>
-                                </div>
-                                <div class="price-meta-item">
-                                    <span class="price-meta-label">Monthly Avg</span>
-                                    <span class="price-meta-value">₱<?php echo number_format($history['monthly_avg'], 2); ?></span>
-                                </div>
-                            </div>
-                        </div>
-                        <?php endforeach; ?>
-                    </div>
-                    
-                    <!-- Price History Chart -->
-                    <h3 style="color: var(--text-dark); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-chart-line" style="color: var(--icon-green);"></i> Price Trends (Last 30 Days)
-                    </h3>
-                    <div class="price-history-chart">
-                        <div class="chart-container">
-                            <canvas id="priceHistoryChart"></canvas>
-                        </div>
-                        <div class="chart-legend" id="chartLegend"></div>
-                    </div>
-                    
-                    <!-- Price Alert -->
-                    <div class="price-alert">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <div class="price-alert-content">
-                            <div class="price-alert-title">Market Alert</div>
-                            <div class="price-alert-text">
-                                Copper prices have increased 12% this month due to high demand. Consider selling your copper scrap now to maximize your earnings.
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Detailed Price Table -->
-                    <h3 style="margin-top: 30px; color: var(--text-dark); display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-list" style="color: var(--icon-green);"></i> Detailed Price List
-                    </h3>
-                    <div class="price-table-container">
-                        <table class="price-table">
-                            <thead>
-                                <tr>
-                                    <th>Material</th>
-                                    <th>Grade</th>
-                                    <th>Price (per kg)</th>
-                                    <th>Trend (7d)</th>
-                                    <th>Min. Weight</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($prices as $material): 
-                                    $history = $price_history[$material['id']];
-                                    $trend_icon = $history['trend'] === 'up' ? 'fa-arrow-up' : ($history['trend'] === 'down' ? 'fa-arrow-down' : 'fa-equals');
-                                    $trend_color = $history['trend'] === 'up' ? 'var(--stock-green)' : ($history['trend'] === 'down' ? 'var(--sales-orange)' : 'var(--text-light)');
-                                    
-                                    // Determine grade based on material (simplified for demo)
-                                    $grade = '';
-                                    if (strpos($material['material_option'], 'Copper') !== false) {
-                                        $grade = strpos($material['material_option'], 'Wire') !== false ? '#1 Bright' : '#2 Mixed';
-                                    } elseif (strpos($material['material_option'], 'Aluminum') !== false) {
-                                        $grade = strpos($material['material_option'], 'Cans') !== false ? 'Clean' : 'Extrusion';
-                                    } elseif (strpos($material['material_option'], 'Iron') !== false) {
-                                        $grade = 'Heavy Melt';
-                                    } elseif (strpos($material['material_option'], 'E-Waste') !== false) {
-                                        $grade = 'Mixed';
-                                    } elseif (strpos($material['material_option'], 'Plastic') !== false) {
-                                        $grade = 'PET Clear';
-                                    } elseif (strpos($material['material_option'], 'Stainless Steel') !== false) {
-                                        $grade = '304 Grade';
-                                    }
-                                    
-                                    // Determine min weight (simplified for demo)
-                                    $min_weight = '5kg';
-                                    if (strpos($material['material_option'], 'Wire') !== false || strpos($material['material_option'], 'E-Waste') !== false) {
-                                        $min_weight = '1kg';
-                                    } elseif (strpos($material['material_option'], 'Cans') !== false || strpos($material['material_option'], 'Plastic') !== false) {
-                                        $min_weight = '10kg';
-                                    } elseif (strpos($material['material_option'], 'Iron') !== false) {
-                                        $min_weight = '20kg';
-                                    }
-                                ?>
-                                <tr>
-                                    <td style="font-weight: 500;"><?php echo htmlspecialchars($material['material_option']); ?></td>
-                                    <td><?php echo htmlspecialchars($grade); ?></td>
-                                    <td style="font-weight: 600;">₱<?php echo number_format($material['unit_price'], 2); ?></td>
-                                    <td class="trend-cell">
-                                        <i class="fas <?php echo $trend_icon; ?>" style="color: <?php echo $trend_color; ?>"></i>
-                                        <span style="color: <?php echo $trend_color; ?>"><?php 
-                                            echo $history['trend'] === 'up' ? '+' : ($history['trend'] === 'down' ? '-' : '');
-                                            echo number_format($history['change_percent'], 1); ?>%
-                                        </span>
-                                    </td>
-                                    <td><?php echo htmlspecialchars($min_weight); ?></td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <!-- Price Alert Subscription -->
-                    <h3 style="margin-top: 40px; color: var(--text-dark); display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-bell" style="color: var(--sales-orange);"></i> Get Price Alerts
-                    </h3>
-                    <p style="color: var(--text-light); margin-bottom: 15px;">
-                        Receive notifications when prices for your selected materials change significantly.
-                    </p>
-                    <form class="subscribe-form">
-                        <select>
-                            <option value="">Select material to monitor</option>
-                            <?php foreach ($prices as $material): ?>
-                                <option value="<?php echo $material['id']; ?>"><?php echo htmlspecialchars($material['material_option']); ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                        <button type="button">
-                            <i class="fas fa-bell"></i> Set Alert
-                        </button>
-                    </form>
                 </div>
             </div>
+            
+            <!-- Detailed Price Table -->
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-list"></i> Detailed Price List</h3>
+                <a href="#" class="view-all">
+                    Download as PDF <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="price-table-container">
+                <table class="price-table">
+                    <thead>
+                        <tr>
+                            <th>Material</th>
+                            <th>Grade</th>
+                            <th>Price (per kg)</th>
+                            <th>Trend (7d)</th>
+                            <th>Min. Weight</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($prices as $material): 
+                            $history = $price_history[$material['id']];
+                            $trend_icon = $history['trend'] === 'up' ? 'fa-arrow-up' : ($history['trend'] === 'down' ? 'fa-arrow-down' : 'fa-equals');
+                            $trend_color = $history['trend'] === 'up' ? 'var(--stock-green)' : ($history['trend'] === 'down' ? 'var(--sales-orange)' : 'var(--text-dark)');
+                            
+                            // Determine grade based on material (simplified for demo)
+                            $grade = '';
+                            if (strpos($material['material_option'], 'Copper') !== false) {
+                                $grade = strpos($material['material_option'], 'Wire') !== false ? '#1 Bright' : '#2 Mixed';
+                            } elseif (strpos($material['material_option'], 'Aluminum') !== false) {
+                                $grade = strpos($material['material_option'], 'Cans') !== false ? 'Clean' : 'Extrusion';
+                            } elseif (strpos($material['material_option'], 'Iron') !== false) {
+                                $grade = 'Heavy Melt';
+                            } elseif (strpos($material['material_option'], 'E-Waste') !== false) {
+                                $grade = 'Mixed';
+                            } elseif (strpos($material['material_option'], 'Plastic') !== false) {
+                                $grade = 'PET Clear';
+                            } elseif (strpos($material['material_option'], 'Stainless Steel') !== false) {
+                                $grade = '304 Grade';
+                            }
+                            
+                            // Determine min weight (simplified for demo)
+                            $min_weight = '5kg';
+                            if (strpos($material['material_option'], 'Wire') !== false || strpos($material['material_option'], 'E-Waste') !== false) {
+                                $min_weight = '1kg';
+                            } elseif (strpos($material['material_option'], 'Cans') !== false || strpos($material['material_option'], 'Plastic') !== false) {
+                                $min_weight = '10kg';
+                            } elseif (strpos($material['material_option'], 'Iron') !== false) {
+                                $min_weight = '20kg';
+                            }
+                        ?>
+                        <tr>
+                            <td style="font-weight: 500;"><?php echo htmlspecialchars($material['material_option']); ?></td>
+                            <td><?php echo htmlspecialchars($grade); ?></td>
+                            <td style="font-weight: 600;">₱<?php echo number_format($material['unit_price'], 2); ?></td>
+                            <td class="trend-cell">
+                                <i class="fas <?php echo $trend_icon; ?>" style="color: <?php echo $trend_color; ?>; opacity: 0.8;"></i>
+                                <span style="color: <?php echo $trend_color; ?>"><?php 
+                                    echo $history['trend'] === 'up' ? '+' : ($history['trend'] === 'down' ? '-' : '');
+                                    echo number_format($history['change_percent'], 1); ?>%
+                                </span>
+                            </td>
+                            <td><?php echo htmlspecialchars($min_weight); ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Price Alert Subscription -->
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-bell"></i> Get Price Alerts</h3>
+            </div>
+            <p style="color: var(--text-dark); opacity: 0.8; margin-bottom: 15px;">
+                Receive notifications when prices for your selected materials change significantly.
+            </p>
+            <form class="subscribe-form">
+                <select>
+                    <option value="">Select material to monitor</option>
+                    <?php foreach ($prices as $material): ?>
+                        <option value="<?php echo $material['id']; ?>"><?php echo htmlspecialchars($material['material_option']); ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <button type="button">
+                    <i class="fas fa-bell"></i> Set Alert
+                </button>
+            </form>
         </div>
     </div>
 
     <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+
         // Initialize the price history chart
         const chartData = <?php echo $chart_data_json; ?>;
         
@@ -958,7 +1128,8 @@ mysqli_close($conn);
                             callback: function(value) {
                                 return '₱' + value.toFixed(2);
                             },
-                            color: 'var(--text-light)'
+                            color: 'var(--text-dark)',
+                            opacity: 0.7
                         },
                         grid: {
                             color: 'rgba(0,0,0,0.05)',
@@ -973,7 +1144,8 @@ mysqli_close($conn);
                         ticks: {
                             maxRotation: 45,
                             minRotation: 45,
-                            color: 'var(--text-light)',
+                            color: 'var(--text-dark)',
+                            opacity: 0.7,
                             callback: function(value, index, values) {
                                 // Show only every 5th day to avoid clutter
                                 if (index % 5 === 0 || index === values.length - 1) {

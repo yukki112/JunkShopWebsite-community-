@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Format user data for display
-$user_name = $user['first_name'] . ' ' . $user['last_name'];
+$user_name = $user['last_name'] . ' ' . $user['first_name'];
 $user_initials = strtoupper(substr($user['first_name'], 0, 1) . substr($user['last_name'], 0, 1));
 $member_since = date('F Y', strtotime($user['created_at']));
 ?>
@@ -166,80 +166,51 @@ $member_since = date('F Y', strtotime($user['created_at']));
             --text-dark: #2E2B29;
             --icon-green: #6A7F46;
             --icon-orange: #D97A41;
-            
-            /* Mapped to existing variables */
-            --primary-color: var(--stock-green);
-            --secondary-color: var(--sales-orange);
-            --accent-color: var(--icon-green);
-            --dark-color: var(--topbar-brown);
-            --light-color: var(--panel-cream);
-            --text-color: var(--text-dark);
-            --text-light: #777;
+            --accent-blue: #4A89DC;
+            --sidebar-width: 280px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
             background-color: var(--bg-beige);
             color: var(--text-dark);
             line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        header {
-            background-color: var(--topbar-brown);
+        /* Sidebar - New Vibrant Design */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--topbar-brown) 0%, #2A2520 100%);
             color: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px 0;
             position: sticky;
             top: 0;
-            z-index: 100;
+            height: 100vh;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+            z-index: 10;
+            overflow-y: auto;
         }
 
-        .header-content {
+        .sidebar-header {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--panel-cream);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo::before {
-            content: "♻";
-            font-size: 28px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-info span {
-            font-weight: 500;
-            color: var(--panel-cream);
+            padding: 0 20px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
         }
 
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             background-color: var(--panel-cream);
             display: flex;
@@ -247,34 +218,51 @@ $member_since = date('F Y', strtotime($user['created_at']));
             justify-content: center;
             font-weight: bold;
             color: var(--topbar-brown);
-            overflow: hidden;
+            font-size: 24px;
+            margin-bottom: 15px;
+            border: 3px solid var(--sales-orange);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
         }
 
         .user-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            border-radius: 50%;
         }
 
-        .dashboard {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 30px;
-            padding: 30px 0;
+        .user-name {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            text-align: center;
         }
 
-        .sidebar {
-            background-color: var(--panel-cream);
-            border-radius: 15px;
-            padding: 25px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            height: fit-content;
-            position: sticky;
-            top: 80px;
+        .user-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: var(--panel-cream);
+            opacity: 0.8;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background-color: #2ECC71;
+            border-radius: 50%;
         }
 
         .nav-menu {
             list-style: none;
+            padding: 0 15px;
         }
 
         .nav-menu li {
@@ -284,44 +272,167 @@ $member_since = date('F Y', strtotime($user['created_at']));
         .nav-menu a {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 25px;
-            color: var(--text-dark);
+            gap: 15px;
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.8);
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s;
-            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-menu a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background-color: var(--sales-orange);
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            opacity: 0;
         }
 
         .nav-menu a:hover {
-            background-color: rgba(106, 127, 70, 0.1);
-            border-left-color: var(--icon-green);
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-menu a:hover::before {
+            transform: translateX(0);
+            opacity: 1;
         }
 
         .nav-menu a.active {
-            background-color: rgba(106, 127, 70, 0.15);
-            border-left-color: var(--icon-green);
-            color: var(--icon-green);
+            background-color: rgba(255,255,255,0.15);
+            color: white;
+            font-weight: 600;
+        }
+
+        .nav-menu a.active::before {
+            transform: translateX(0);
+            opacity: 1;
         }
 
         .nav-menu i {
             width: 20px;
             text-align: center;
             font-size: 18px;
+            color: var(--panel-cream);
         }
 
+        .nav-menu a.active i {
+            color: var(--sales-orange);
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content Area */
         .main-content {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
         }
 
-        .card {
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--topbar-brown);
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--sales-orange);
+            border-radius: 3px;
+        }
+
+        .notification-bell {
+            position: relative;
+            width: 40px;
+            height: 40px;
             background-color: white;
-            border-radius: 12px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .notification-bell:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            width: 18px;
+            height: 18px;
+            background-color: var(--sales-orange);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-card {
+            background-color: white;
+            border-radius: 15px;
             padding: 25px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            animation: fadeIn 0.5s ease-out forwards;
+            margin-bottom: 30px;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .card-header {
@@ -346,42 +457,75 @@ $member_since = date('F Y', strtotime($user['created_at']));
             color: var(--icon-green);
         }
 
-        .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
+        .view-all {
+            color: var(--icon-green);
+            text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s;
-            border: none;
-            font-size: 15px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
         }
-        
+
+        .view-all:hover {
+            color: var(--sales-orange);
+            transform: translateX(3px);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+            z-index: 1;
+        }
+
         .btn-primary {
             background: linear-gradient(90deg, var(--icon-green) 0%, var(--stock-green) 100%);
             color: white;
-            box-shadow: 0 3px 10px rgba(106, 127, 70, 0.3);
+            box-shadow: 0 5px 15px rgba(106, 127, 70, 0.3);
         }
-        
+
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(106, 127, 70, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(106, 127, 70, 0.4);
         }
-        
+
         .btn-outline {
             background-color: transparent;
             border: 1px solid rgba(0,0,0,0.1);
             color: var(--text-dark);
         }
-        
+
         .btn-outline:hover {
-            background-color: rgba(0,0,0,0.03);
+            background-color: rgba(0,0,0,0.05);
         }
-        
+
         .btn-danger {
             background-color: #d32f2f;
             color: white;
         }
-        
+
         .btn-danger:hover {
             background-color: #c62828;
         }
@@ -392,39 +536,46 @@ $member_since = date('F Y', strtotime($user['created_at']));
             border-bottom: 1px solid rgba(0,0,0,0.05);
             margin-bottom: 25px;
         }
-        
+
         .settings-tab {
             padding: 12px 20px;
             cursor: pointer;
             border-bottom: 3px solid transparent;
             font-weight: 500;
-            color: var(--text-light);
+            color: var(--text-dark);
+            opacity: 0.7;
+            transition: all 0.3s;
         }
-        
+
+        .settings-tab:hover {
+            opacity: 1;
+        }
+
         .settings-tab.active {
             border-bottom-color: var(--icon-green);
             color: var(--icon-green);
+            opacity: 1;
         }
-        
+
         .settings-section {
             display: none;
         }
-        
+
         .settings-section.active {
             display: block;
             animation: fadeIn 0.3s ease;
         }
-        
+
         .profile-header {
             display: flex;
             align-items: center;
             gap: 30px;
             margin-bottom: 30px;
         }
-        
+
         .profile-avatar {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             background-color: rgba(106, 127, 70, 0.1);
             display: flex;
@@ -437,18 +588,20 @@ $member_since = date('F Y', strtotime($user['created_at']));
             overflow: hidden;
             cursor: pointer;
             transition: all 0.3s;
+            border: 3px solid rgba(106, 127, 70, 0.2);
         }
-        
+
         .profile-avatar:hover {
             transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        
+
         .profile-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        
+
         .avatar-upload {
             position: absolute;
             bottom: 0;
@@ -462,11 +615,11 @@ $member_since = date('F Y', strtotime($user['created_at']));
             opacity: 0;
             transition: opacity 0.3s;
         }
-        
+
         .profile-avatar:hover .avatar-upload {
             opacity: 1;
         }
-        
+
         #avatarInput {
             position: absolute;
             top: 0;
@@ -476,33 +629,35 @@ $member_since = date('F Y', strtotime($user['created_at']));
             opacity: 0;
             cursor: pointer;
         }
-        
+
         .profile-info h3 {
             margin-bottom: 8px;
             color: var(--text-dark);
+            font-size: 24px;
         }
-        
+
         .profile-info p {
-            color: var(--text-light);
+            color: var(--text-dark);
+            opacity: 0.7;
         }
-        
+
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
-        
+
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
             color: var(--text-dark);
         }
-        
+
         .form-group input, 
         .form-group select,
         .form-group textarea {
@@ -513,12 +668,12 @@ $member_since = date('F Y', strtotime($user['created_at']));
             font-size: 15px;
             transition: all 0.3s;
         }
-        
+
         .form-group textarea {
             min-height: 100px;
             resize: vertical;
         }
-        
+
         .form-group input:focus, 
         .form-group select:focus,
         .form-group textarea:focus {
@@ -526,12 +681,12 @@ $member_since = date('F Y', strtotime($user['created_at']));
             border-color: var(--icon-green);
             box-shadow: 0 0 0 3px rgba(106, 127, 70, 0.1);
         }
-        
+
         input[readonly], input[disabled] {
             background-color: rgba(0,0,0,0.03);
             cursor: not-allowed;
         }
-        
+
         .form-actions {
             display: flex;
             justify-content: flex-end;
@@ -540,32 +695,36 @@ $member_since = date('F Y', strtotime($user['created_at']));
             border-top: 1px solid rgba(0,0,0,0.05);
             padding-top: 20px;
         }
-        
+
         .security-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px;
-            border: 1px solid rgba(0,0,0,0.05);
-            border-radius: 10px;
+            background-color: white;
+            border-radius: 12px;
             margin-bottom: 15px;
             transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.05);
         }
-        
+
         .security-item:hover {
-            background-color: rgba(106, 127, 70, 0.03);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-color: rgba(106, 127, 70, 0.3);
         }
-        
+
         .security-info {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-        
+
         .security-icon {
             width: 50px;
             height: 50px;
-            border-radius: 50%;
+            border-radius: 12px;
             background-color: rgba(106, 127, 70, 0.1);
             display: flex;
             align-items: center;
@@ -573,7 +732,7 @@ $member_since = date('F Y', strtotime($user['created_at']));
             color: var(--icon-green);
             font-size: 20px;
         }
-        
+
         .verification-badge {
             display: inline-block;
             padding: 3px 10px;
@@ -583,33 +742,37 @@ $member_since = date('F Y', strtotime($user['created_at']));
             font-size: 12px;
             margin-left: 10px;
         }
-        
+
         .delete-account {
             background-color: rgba(255, 0, 0, 0.05);
             border: 1px solid rgba(255, 0, 0, 0.1);
             padding: 25px;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-top: 40px;
         }
-        
+
         .alert {
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid transparent;
         }
-        
+
         .alert-success {
             background-color: rgba(40, 167, 69, 0.1);
             color: #28a745;
-            border: 1px solid rgba(40, 167, 69, 0.2);
+            border-color: rgba(40, 167, 69, 0.2);
         }
-        
+
         .alert-danger {
             background-color: rgba(220, 53, 69, 0.1);
             color: #dc3545;
-            border: 1px solid rgba(220, 53, 69, 0.2);
+            border-color: rgba(220, 53, 69, 0.2);
         }
-        
+
         /* Modal Styles */
         .modal {
             display: none;
@@ -620,50 +783,67 @@ $member_since = date('F Y', strtotime($user['created_at']));
             width: 100%;
             height: 100%;
             background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s;
         }
         
         .modal-content {
             background-color: white;
             margin: 10% auto;
-            padding: 25px;
-            border-radius: 12px;
+            padding: 30px;
+            border-radius: 15px;
             width: 90%;
             max-width: 500px;
-            box-shadow: 0 5px 30px rgba(0,0,0,0.2);
-            animation: modalFadeIn 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+            animation: slideDown 0.3s;
         }
         
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
-        .modal-header h3 {
-            color: var(--text-dark);
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         
-        .close {
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
             font-size: 24px;
+            font-weight: bold;
+            color: var(--text-dark);
+            opacity: 0.5;
             cursor: pointer;
-            color: var(--text-light);
-            transition: color 0.3s;
+            transition: all 0.3s;
         }
         
-        .close:hover {
-            color: var(--text-dark);
+        .close-modal:hover {
+            opacity: 1;
+            color: var(--icon-green);
+            transform: rotate(90deg);
+        }
+        
+        .modal h3 {
+            color: var(--icon-green);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
         }
         
         .modal-footer {
             display: flex;
             justify-content: flex-end;
-            gap: 10px;
+            gap: 15px;
             margin-top: 20px;
             padding-top: 20px;
             border-top: 1px solid rgba(0,0,0,0.05);
         }
-        
+
         /* Cropper Modal Styles */
         #avatarModal {
             display: none;
@@ -706,14 +886,50 @@ $member_since = date('F Y', strtotime($user['created_at']));
             margin-top: 20px;
         }
 
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            background-color: var(--sales-orange);
+            color: white;
+            border-radius: 8px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
         /* Responsive styles */
-        @media (max-width: 1024px) {
-            .dashboard {
-                grid-template-columns: 1fr;
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 240px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                transition: all 0.3s ease;
             }
             
-            .sidebar {
-                position: static;
+            .sidebar.active {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            
+            .mobile-menu-toggle {
+                display: flex;
             }
         }
 
@@ -734,9 +950,9 @@ $member_since = date('F Y', strtotime($user['created_at']));
             }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 576px) {
             .card {
-                padding: 20px 15px;
+                padding: 20px;
             }
             
             .form-actions, .modal-footer {
@@ -747,166 +963,166 @@ $member_since = date('F Y', strtotime($user['created_at']));
                 width: 100%;
             }
         }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container header-content">
-            <div class="logo">JunkValue</div>
-            <div class="user-info">
-                <span>Hello, <?php echo htmlspecialchars($user_name); ?>!</span>
-                <div class="user-avatar">
-                    <?php if (!empty($user['profile_image']) && file_exists($user['profile_image'])): ?>
-                        <img src="<?php echo htmlspecialchars($user['profile_image']); ?>" alt="Profile">
-                    <?php else: ?>
-                        <?php echo $user_initials; ?>
-                    <?php endif; ?>
-                </div>
+    <!-- Mobile Menu Toggle -->
+    <div class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="user-avatar">
+                <?php if (!empty($user['profile_image']) && file_exists($user['profile_image'])): ?>
+                    <img src="<?php echo htmlspecialchars($user['profile_image']); ?>" alt="Profile">
+                <?php else: ?>
+                    <?php echo $user_initials; ?>
+                <?php endif; ?>
+            </div>
+            <div class="user-name"><?php echo htmlspecialchars($user_name); ?></div>
+            <div class="user-status">
+                <span class="status-indicator"></span>
+                <span>Active</span>
             </div>
         </div>
-    </header>
+        
+        <ul class="nav-menu">
+            <li><a href="index.php"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="Transaction.php"><i class="fas fa-history"></i> Transaction History</a></li>
+            <li><a href="Schedule.php"><i class="fas fa-calendar-alt"></i> Schedule Pickup</a></li>
+            <li><a href="prices.php"><i class="fas fa-coins"></i> Current Prices</a></li>
+            <li><a href="rewards.php"><i class="fas fa-award"></i> Loyalty Rewards</a></li>
+            <li><a href="#" class="active"><i class="fas fa-user-cog"></i> Account Settings</a></li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <a href="Login/Login.php" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </div>
     
-    <div class="container">
-        <div class="dashboard">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <ul class="nav-menu">
-                    <li><a href="index.php"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="Transaction.php"><i class="fas fa-history"></i> Transaction History</a></li>
-                    <li><a href="Schedule.php"><i class="fas fa-calendar-alt"></i> Schedule Pickup</a></li>
-                    <li><a href="prices.php"><i class="fas fa-coins"></i> Current Prices</a></li>
-                    <li><a href="rewards.php"><i class="fas fa-award"></i> Loyalty Rewards</a></li>
-                    <li><a href="#" class="active"><i class="fas fa-user-cog"></i> Account Settings</a></li>
-                    <li><a href="Login/Login.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                </ul>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1 class="page-title">Account Settings</h1>
+            <div class="notification-bell">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </div>
+        </div>
+        
+        <div class="dashboard-card">
+            <?php if (isset($success_message)): ?>
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i> <?php echo $success_message; ?>
+                </div>
+            <?php endif; ?>
+            
+            <?php if (isset($error_message)): ?>
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle"></i> <?php echo $error_message; ?>
+                </div>
+            <?php endif; ?>
+            
+            <!-- Settings Tabs -->
+            <div class="settings-tabs">
+                <div class="settings-tab active" onclick="showSection('profile')">Profile</div>
+                <div class="settings-tab" onclick="showSection('security')">Security</div>
             </div>
             
-            <!-- Main Content -->
-            <div class="main-content">
-                <div class="card">
-                    <h2 style="margin-bottom: 20px; color: var(--text-dark);">Account Settings</h2>
-                    
-                    <?php if (isset($success_message)): ?>
-                        <div class="alert alert-success">
-                            <i class="fas fa-check-circle"></i> <?php echo $success_message; ?>
+            <!-- Profile Section -->
+            <div class="settings-section active" id="profileSection">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="avatarContainer">
+                        <?php if (!empty($user['profile_image'])): ?>
+                            <img src="<?php echo htmlspecialchars($user['profile_image']); ?>" alt="Profile">
+                        <?php else: ?>
+                            <span><?php echo $user_initials; ?></span>
+                        <?php endif; ?>
+                        <div class="avatar-upload">
+                            <i class="fas fa-camera"></i> Change
                         </div>
-                    <?php endif; ?>
-                    
-                    <?php if (isset($error_message)): ?>
-                        <div class="alert alert-danger">
-                            <i class="fas fa-exclamation-circle"></i> <?php echo $error_message; ?>
+                        <input type="file" id="avatarInput" accept="image/*">
+                    </div>
+                    <div class="profile-info">
+                        <h3><?php echo htmlspecialchars($user_name); ?></h3>
+                        <p>Member since <?php echo $member_since; ?></p>
+                    </div>
+                </div>
+                
+                <form method="POST" action="">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" value="<?php echo htmlspecialchars($user['first_name']); ?>" readonly>
                         </div>
-                    <?php endif; ?>
-                    
-                    <!-- Settings Tabs -->
-                    <div class="settings-tabs">
-                        <div class="settings-tab active" onclick="showSection('profile')">Profile</div>
-                        <div class="settings-tab" onclick="showSection('security')">Security</div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" value="<?php echo htmlspecialchars($user['last_name']); ?>" readonly>
+                        </div>
                     </div>
                     
-                    <!-- Profile Section -->
-                    <div class="settings-section active" id="profileSection">
-                        <div class="profile-header">
-                            <div class="profile-avatar" id="avatarContainer">
-                                <?php if (!empty($user['profile_image'])): ?>
-                                    <img src="<?php echo htmlspecialchars($user['profile_image']); ?>" alt="Profile">
-                                <?php else: ?>
-                                    <span><?php echo $user_initials; ?></span>
-                                <?php endif; ?>
-                                <div class="avatar-upload">
-                                    <i class="fas fa-camera"></i> Change
-                                </div>
-                                <input type="file" id="avatarInput" accept="image/*">
-                            </div>
-                            <div class="profile-info">
-                                <h3><?php echo htmlspecialchars($user_name); ?></h3>
-                                <p>Member since <?php echo $member_since; ?></p>
-                            </div>
-                        </div>
-                        
-                        <form method="POST" action="">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label>First Name</label>
-                                    <input type="text" value="<?php echo htmlspecialchars($user['first_name']); ?>" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label>Last Name</label>
-                                    <input type="text" value="<?php echo htmlspecialchars($user['last_name']); ?>" readonly>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Account Type</label>
-                                <input type="text" value="<?php echo htmlspecialchars($user['user_type']); ?>" readonly>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Phone Number</label>
-                                <input type="tel" value="<?php echo htmlspecialchars($user['phone']); ?>" readonly>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Default Pickup Address</label>
-                                <textarea name="address" style="min-height: 100px;"><?php echo htmlspecialchars($user['address']); ?></textarea>
-                            </div>
-                            
-                            <div class="form-actions">
-                                <button type="button" class="btn btn-outline">Cancel</button>
-                                <button type="submit" name="update_profile" class="btn btn-primary">Save Changes</button>
-                            </div>
-                        </form>
+                    <div class="form-group">
+                        <label>Account Type</label>
+                        <input type="text" value="<?php echo htmlspecialchars($user['user_type']); ?>" readonly>
                     </div>
                     
-                    <!-- Security Section -->
-                    <div class="settings-section" id="securitySection">
-                        <h3 style="margin-bottom: 20px; color: var(--text-dark);">Security Settings</h3>
-                        
-                        <div class="security-item">
-                            <div class="security-info">
-                                <div class="security-icon">
-                                    <i class="fas fa-lock"></i>
-                                </div>
-                                <div>
-                                    <h4 style="margin: 0; color: var(--text-dark);">Password</h4>
-                                    <p style="margin: 0; color: var(--text-light);">Last changed 3 months ago</p>
-                                </div>
-                            </div>
-                            <button class="btn btn-outline" style="padding: 8px 15px;" onclick="openModal('passwordModal')">Change</button>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" value="<?php echo htmlspecialchars($user['phone']); ?>" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Default Pickup Address</label>
+                        <textarea name="address" style="min-height: 100px;"><?php echo htmlspecialchars($user['address']); ?></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline">Cancel</button>
+                        <button type="submit" name="update_profile" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Security Section -->
+            <div class="settings-section" id="securitySection">
+                <h3 style="margin-bottom: 20px; color: var(--text-dark);">Security Settings</h3>
+                
+                <div class="security-item">
+                    <div class="security-info">
+                        <div class="security-icon">
+                            <i class="fas fa-lock"></i>
                         </div>
-                        
-                        <div class="security-item">
-                            <div class="security-info">
-                                <div class="security-icon">
-                                    <i class="fas fa-mobile-alt"></i>
-                                </div>
-                                <div>
-                                    <h4 style="margin: 0; color: var(--text-dark);">Phone Number</h4>
-                                    <p style="margin: 0; color: var(--text-light);"><?php echo htmlspecialchars($user['phone']); ?></p>
-                                </div>
-                            </div>
-                            <button class="btn btn-outline" style="padding: 8px 15px;" onclick="openModal('phoneModal')">Change</button>
-                        </div>
-                        
-                        <div class="delete-account">
-                            <h4 style="margin-top: 0; color: #dc3545;"><i class="fas fa-exclamation-triangle"></i> Danger Zone</h4>
-                            <p style="color: var(--text-dark);">Once you delete your account, there is no going back. Please be certain.</p>
-                            <button type="button" class="btn btn-outline" style="border-color: #dc3545; color: #dc3545; margin-top: 10px;" onclick="openModal('deleteModal')">
-                                Delete Account
-                            </button>
+                        <div>
+                            <h4 style="margin: 0; color: var(--text-dark);">Password</h4>
+                            <p style="margin: 0; color: var(--text-dark); opacity: 0.7;">Last changed 3 months ago</p>
                         </div>
                     </div>
+                    <button class="btn btn-outline" style="padding: 8px 15px;" onclick="openModal('passwordModal')">Change</button>
+                </div>
+                
+                <div class="security-item">
+                    <div class="security-info">
+                        <div class="security-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div>
+                            <h4 style="margin: 0; color: var(--text-dark);">Phone Number</h4>
+                            <p style="margin: 0; color: var(--text-dark); opacity: 0.7;"><?php echo htmlspecialchars($user['phone']); ?></p>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline" style="padding: 8px 15px;" onclick="openModal('phoneModal')">Change</button>
+                </div>
+                
+                <div class="delete-account">
+                    <h4 style="margin-top: 0; color: #dc3545;"><i class="fas fa-exclamation-triangle"></i> Danger Zone</h4>
+                    <p style="color: var(--text-dark); opacity: 0.8;">Once you delete your account, there is no going back. Please be certain.</p>
+                    <button type="button" class="btn btn-outline" style="border-color: #dc3545; color: #dc3545; margin-top: 10px;" onclick="openModal('deleteModal')">
+                        Delete Account
+                    </button>
                 </div>
             </div>
         </div>
@@ -915,10 +1131,8 @@ $member_since = date('F Y', strtotime($user['created_at']));
     <!-- Change Password Modal -->
     <div id="passwordModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3>Change Password</h3>
-                <span class="close" onclick="closeModal('passwordModal')">&times;</span>
-            </div>
+            <span class="close-modal" onclick="closeModal('passwordModal')">&times;</span>
+            <h3><i class="fas fa-lock"></i> Change Password</h3>
             <form method="POST" action="">
                 <div class="form-group">
                     <label>Current Password</label>
@@ -943,10 +1157,8 @@ $member_since = date('F Y', strtotime($user['created_at']));
     <!-- Change Phone Modal -->
     <div id="phoneModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3>Change Phone Number</h3>
-                <span class="close" onclick="closeModal('phoneModal')">&times;</span>
-            </div>
+            <span class="close-modal" onclick="closeModal('phoneModal')">&times;</span>
+            <h3><i class="fas fa-mobile-alt"></i> Change Phone Number</h3>
             <form method="POST" action="">
                 <div class="form-group">
                     <label>New Phone Number</label>
@@ -963,12 +1175,10 @@ $member_since = date('F Y', strtotime($user['created_at']));
     <!-- Delete Account Modal -->
     <div id="deleteModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="color: #dc3545;"><i class="fas fa-exclamation-triangle"></i> Delete Account</h3>
-                <span class="close" onclick="closeModal('deleteModal')">&times;</span>
-            </div>
-            <p style="color: var(--text-dark); margin-bottom: 15px;">This action cannot be undone. This will permanently delete your account and all associated data.</p>
-            <p style="color: var(--text-dark); margin-bottom: 15px;">To confirm, please type <strong>DELETE</strong> in the box below:</p>
+            <span class="close-modal" onclick="closeModal('deleteModal')">&times;</span>
+            <h3 style="color: #dc3545;"><i class="fas fa-exclamation-triangle"></i> Delete Account</h3>
+            <p style="color: var(--text-dark); opacity: 0.8; margin-bottom: 15px;">This action cannot be undone. This will permanently delete your account and all associated data.</p>
+            <p style="color: var(--text-dark); opacity: 0.8; margin-bottom: 15px;">To confirm, please type <strong>DELETE</strong> in the box below:</p>
             <form method="POST" action="">
                 <div class="form-group">
                     <input type="text" name="confirmation" required>
@@ -1002,6 +1212,11 @@ $member_since = date('F Y', strtotime($user['created_at']));
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     
     <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+
         // Tab switching functionality
         function showSection(section) {
             document.querySelectorAll('.settings-section').forEach(sec => {
@@ -1027,7 +1242,7 @@ $member_since = date('F Y', strtotime($user['created_at']));
         
         // Close modal when clicking outside
         window.onclick = function(event) {
-            if (event.target.className === 'modal') {
+            if (event.target.classList.contains('modal')) {
                 event.target.style.display = 'none';
             }
         }

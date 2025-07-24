@@ -17,7 +17,7 @@ mysqli_stmt_bind_param($user_stmt, "i", $user_id);
 mysqli_stmt_execute($user_stmt);
 $user_result = mysqli_stmt_get_result($user_stmt);
 $user = mysqli_fetch_assoc($user_result);
-$user_name = $user['first_name'] . ' ' . $user['last_name'];
+$user_name = $user['last_name'] . ' ' . $user['first_name'];
 $user_initials = strtoupper(substr($user['first_name'], 0, 1) . substr($user['last_name'], 0, 1));
 
 // Get 3 most recent transactions
@@ -48,80 +48,51 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
             --text-dark: #2E2B29;
             --icon-green: #6A7F46;
             --icon-orange: #D97A41;
-            
-            /* Mapped to existing variables */
-            --primary-color: var(--stock-green);
-            --secondary-color: var(--sales-orange);
-            --accent-color: var(--icon-green);
-            --dark-color: var(--topbar-brown);
-            --light-color: var(--panel-cream);
-            --text-color: var(--text-dark);
-            --text-light: #777;
+            --accent-blue: #4A89DC;
+            --sidebar-width: 280px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
             background-color: var(--bg-beige);
             color: var(--text-dark);
             line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        header {
-            background-color: var(--topbar-brown);
+        /* Sidebar - New Vibrant Design */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--topbar-brown) 0%, #2A2520 100%);
             color: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px 0;
             position: sticky;
             top: 0;
-            z-index: 100;
+            height: 100vh;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+            z-index: 10;
+            overflow-y: auto;
         }
 
-        .header-content {
+        .sidebar-header {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--panel-cream);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo::before {
-            content: "♻";
-            font-size: 28px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-info span {
-            font-weight: 500;
-            color: var(--panel-cream);
+            padding: 0 20px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
         }
 
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             background-color: var(--panel-cream);
             display: flex;
@@ -129,34 +100,51 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
             justify-content: center;
             font-weight: bold;
             color: var(--topbar-brown);
-            overflow: hidden;
+            font-size: 24px;
+            margin-bottom: 15px;
+            border: 3px solid var(--sales-orange);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
         }
 
         .user-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            border-radius: 50%;
         }
 
-        .dashboard {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 30px;
-            padding: 30px 0;
+        .user-name {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            text-align: center;
         }
 
-        .sidebar {
-            background-color: var(--panel-cream);
-            border-radius: 15px;
-            padding: 25px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            height: fit-content;
-            position: sticky;
-            top: 80px;
+        .user-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: var(--panel-cream);
+            opacity: 0.8;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background-color: #2ECC71;
+            border-radius: 50%;
         }
 
         .nav-menu {
             list-style: none;
+            padding: 0 15px;
         }
 
         .nav-menu li {
@@ -166,43 +154,270 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
         .nav-menu a {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 25px;
-            color: var(--text-dark);
+            gap: 15px;
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.8);
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s;
-            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-menu a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background-color: var(--sales-orange);
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            opacity: 0;
         }
 
         .nav-menu a:hover {
-            background-color: rgba(106, 127, 70, 0.1);
-            border-left-color: var(--icon-green);
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-menu a:hover::before {
+            transform: translateX(0);
+            opacity: 1;
         }
 
         .nav-menu a.active {
-            background-color: rgba(106, 127, 70, 0.15);
-            border-left-color: var(--icon-green);
-            color: var(--icon-green);
+            background-color: rgba(255,255,255,0.15);
+            color: white;
+            font-weight: 600;
+        }
+
+        .nav-menu a.active::before {
+            transform: translateX(0);
+            opacity: 1;
         }
 
         .nav-menu i {
             width: 20px;
             text-align: center;
             font-size: 18px;
+            color: var(--panel-cream);
         }
 
+        .nav-menu a.active i {
+            color: var(--sales-orange);
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content Area */
         .main-content {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
         }
 
-        .card {
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--topbar-brown);
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--sales-orange);
+            border-radius: 3px;
+        }
+
+        .notification-bell {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .notification-bell:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            width: 18px;
+            height: 18px;
+            background-color: var(--sales-orange);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--panel-cream) 0%, #E8DFC8 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(217, 122, 65, 0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .welcome-content h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--topbar-brown);
+            margin-bottom: 10px;
+        }
+
+        .welcome-content p {
+            color: var(--text-dark);
+            max-width: 600px;
+            margin-bottom: 15px;
+        }
+
+        .welcome-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 100px;
+            color: rgba(217, 122, 65, 0.1);
+            z-index: 1;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .action-card {
             background-color: white;
             border-radius: 12px;
             padding: 25px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-dark);
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--sales-orange), var(--icon-green));
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .action-icon {
+            font-size: 30px;
+            color: var(--icon-green);
+            margin-bottom: 20px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background-color: rgba(106, 127, 70, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .action-card:hover .action-icon {
+            transform: rotate(10deg) scale(1.1);
+            background-color: rgba(106, 127, 70, 0.2);
+        }
+
+        .action-title {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .action-desc {
+            font-size: 14px;
+            color: var(--text-dark);
+            opacity: 0.8;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .card-header {
@@ -227,66 +442,47 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
             color: var(--icon-green);
         }
 
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .action-btn {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-            border: 1px solid rgba(0,0,0,0.05);
-            text-decoration: none;
-            color: var(--text-dark);
-        }
-
-        .action-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-            border-color: var(--icon-green);
-        }
-
-        .action-btn i {
-            font-size: 28px;
+        .view-all {
             color: var(--icon-green);
-            margin-bottom: 12px;
-            background-color: rgba(106, 127, 70, 0.1);
-            width: 50px;
-            height: 50px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-        }
-
-        .action-btn span {
-            display: block;
+            text-decoration: none;
             font-weight: 500;
-            font-size: 15px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
         }
 
+        .view-all:hover {
+            color: var(--sales-orange);
+            transform: translateX(3px);
+        }
+
+        /* Price Table */
         .price-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
         }
 
-        .price-table th, .price-table td {
-            padding: 14px 15px;
-            text-align: left;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+        .price-table thead {
+            position: sticky;
+            top: 0;
         }
 
         .price-table th {
-            background-color: rgba(106, 127, 70, 0.05);
+            background-color: rgba(106, 127, 70, 0.08);
             font-weight: 600;
             color: var(--icon-green);
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 2px solid rgba(106, 127, 70, 0.2);
+        }
+
+        .price-table td {
+            padding: 14px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
         .price-table tr:last-child td {
@@ -297,34 +493,68 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
             background-color: rgba(106, 127, 70, 0.03);
         }
 
-        .loyalty-status {
+        /* Loyalty Program */
+        .loyalty-card {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 25px;
+            background: linear-gradient(135deg, rgba(106, 127, 70, 0.05) 0%, rgba(242, 234, 211, 0.5) 100%);
+            padding: 25px;
+            border-radius: 12px;
             margin-bottom: 25px;
-            background-color: rgba(106, 127, 70, 0.05);
-            padding: 20px;
-            border-radius: 10px;
+            border: 1px solid rgba(106, 127, 70, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loyalty-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(106,127,70,0.05) 0%, rgba(106,127,70,0) 70%);
+            z-index: 1;
         }
 
         .loyalty-badge {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #e9ecef 0%, #d1d7dc 100%);
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--panel-cream) 0%, #d1d7dc 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 32px;
             color: var(--sales-orange);
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .loyalty-badge:hover {
+            transform: rotate(15deg) scale(1.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .progress-container {
+            flex-grow: 1;
+            z-index: 2;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
         }
 
         .progress-bar {
             height: 10px;
             background-color: #e9ecef;
             border-radius: 5px;
-            margin: 12px 0;
             overflow: hidden;
         }
 
@@ -342,60 +572,8 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
             to { width: 65%; }
         }
 
-        .transaction {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            transition: all 0.3s;
-        }
-
-        .transaction:hover {
-            background-color: rgba(106, 127, 70, 0.03);
-            border-radius: 8px;
-            padding: 18px 15px;
-        }
-
-        .transaction:last-child {
-            border-bottom: none;
-        }
-
-        .transaction-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .transaction-icon {
-            width: 45px;
-            height: 45px;
-            background-color: rgba(106, 127, 70, 0.1);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--icon-green);
-            font-size: 18px;
-        }
-
-        .transaction-details h4 {
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-
-        .transaction-details p {
-            font-size: 14px;
-            color: var(--text-light);
-        }
-
-        .transaction-amount {
-            font-weight: 600;
-            color: var(--icon-green);
-            font-size: 16px;
-        }
-
-        .grid-2-col {
+        /* Benefits Grid */
+        .benefits-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
@@ -409,37 +587,66 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
             margin-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            padding: 10px 0;
+            border-bottom: 1px dashed rgba(0,0,0,0.1);
         }
 
         .benefits-list i {
             color: var(--icon-green);
-            font-size: 18px;
+            font-size: 20px;
+            flex-shrink: 0;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(106, 127, 70, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        /* Reward Card */
         .reward-card {
             background-color: rgba(106, 127, 70, 0.05);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px dashed rgba(106, 127, 70, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reward-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            z-index: 1;
         }
 
         .reward-card p {
-            font-size: 14px;
-            margin-bottom: 10px;
+            font-size: 15px;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
         }
 
         .progress-mini {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            position: relative;
+            z-index: 2;
         }
 
         .progress-mini-bar {
             flex-grow: 1;
-            height: 6px;
+            height: 8px;
             background-color: #e9ecef;
-            border-radius: 3px;
+            border-radius: 4px;
             overflow: hidden;
         }
 
@@ -447,38 +654,120 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
             height: 100%;
             width: 30%;
             background: linear-gradient(90deg, var(--icon-green) 0%, var(--stock-green) 100%);
-            border-radius: 3px;
+            border-radius: 4px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+            z-index: 1;
         }
 
         .btn-primary {
             background: linear-gradient(90deg, var(--icon-green) 0%, var(--stock-green) 100%);
             color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: 500;
-            font-size: 15px;
-            transition: all 0.3s;
-            box-shadow: 0 3px 10px rgba(106, 127, 70, 0.3);
+            box-shadow: 0 5px 15px rgba(106, 127, 70, 0.3);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(106, 127, 70, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(106, 127, 70, 0.4);
         }
 
-        .trend-up {
-            color: var(--stock-green);
+        /* Transactions */
+        .transaction-list {
+            display: grid;
+            gap: 15px;
         }
 
-        .trend-down {
-            color: var(--sales-orange);
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 20px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background-color: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
-        .trend-neutral {
-            color: var(--text-light);
+        .transaction-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-color: rgba(106, 127, 70, 0.3);
+        }
+
+        .transaction-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .transaction-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background-color: rgba(106, 127, 70, 0.1);
+            color: var(--icon-green);
+            flex-shrink: 0;
+        }
+
+        .transaction-details h4 {
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .transaction-details p {
+            font-size: 14px;
+            color: var(--text-dark);
+            opacity: 0.7;
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--icon-green);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-dark);
+            opacity: 0.7;
+        }
+
+        .empty-state i {
+            font-size: 50px;
+            color: var(--icon-green);
+            margin-bottom: 20px;
+            opacity: 0.5;
         }
 
         /* Modal Styles */
@@ -497,11 +786,11 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
         .modal-content {
             background-color: white;
             margin: 10% auto;
-            padding: 25px;
-            border-radius: 12px;
+            padding: 30px;
+            border-radius: 15px;
             width: 90%;
             max-width: 500px;
-            box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             position: relative;
             animation: slideDown 0.3s;
         }
@@ -518,17 +807,20 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
         
         .close-modal {
             position: absolute;
-            top: 15px;
+            top: 20px;
             right: 20px;
             font-size: 24px;
             font-weight: bold;
-            color: var(--text-light);
+            color: var(--text-dark);
+            opacity: 0.5;
             cursor: pointer;
             transition: all 0.3s;
         }
         
         .close-modal:hover {
+            opacity: 1;
             color: var(--icon-green);
+            transform: rotate(90deg);
         }
         
         .modal h3 {
@@ -537,13 +829,14 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
             display: flex;
             align-items: center;
             gap: 10px;
+            font-size: 22px;
         }
         
         /* Calculator Styles */
         .calculator-form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
         }
         
         .form-group {
@@ -555,31 +848,36 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
         .form-group label {
             font-weight: 500;
             color: var(--text-dark);
+            font-size: 14px;
         }
         
         .form-group select, .form-group input {
-            padding: 12px 15px;
+            padding: 14px 15px;
             border: 1px solid rgba(0,0,0,0.1);
             border-radius: 8px;
             font-size: 15px;
+            background-color: white;
+            transition: all 0.3s ease;
         }
         
         .form-group select:focus, .form-group input:focus {
             outline: none;
             border-color: var(--icon-green);
+            box-shadow: 0 0 0 3px rgba(106, 127, 70, 0.1);
         }
         
         .result-container {
             margin-top: 20px;
             text-align: center;
-            padding: 20px;
+            padding: 25px;
             background-color: rgba(106, 127, 70, 0.05);
-            border-radius: 8px;
+            border-radius: 10px;
+            border: 1px dashed rgba(106, 127, 70, 0.3);
         }
         
         #calculated-result {
-            font-size: 28px;
-            font-weight: 600;
+            font-size: 32px;
+            font-weight: 700;
             color: var(--icon-green);
             margin-top: 10px;
         }
@@ -589,40 +887,47 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
             padding: 20px 0;
         }
         
         .qr-code-image {
-            width: 200px;
-            height: 200px;
+            width: 220px;
+            height: 220px;
             border: 1px solid rgba(0,0,0,0.1);
-            padding: 10px;
+            padding: 15px;
             background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
         }
         
         /* Referral Styles */
         .referral-link-container {
             display: flex;
-            margin: 15px 0;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         }
         
         #referral-link {
             flex-grow: 1;
-            padding: 12px 15px;
-            border: 1px solid rgba(0,0,0,0.1);
-            border-radius: 8px 0 0 8px;
+            padding: 14px 15px;
+            border: none;
             font-size: 14px;
+            background-color: white;
         }
         
         .btn-copy {
             background-color: var(--icon-green);
             color: white;
             border: none;
-            padding: 0 15px;
-            border-radius: 0 8px 8px 0;
+            padding: 0 20px;
             cursor: pointer;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .btn-copy:hover {
@@ -632,14 +937,14 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
         .social-share {
             display: flex;
             gap: 10px;
-            margin-top: 15px;
+            margin-top: 20px;
         }
         
         .social-btn {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             color: white;
             font-weight: 500;
             cursor: pointer;
@@ -648,6 +953,7 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
             justify-content: center;
             gap: 8px;
             transition: all 0.3s;
+            font-size: 14px;
         }
         
         .social-btn.facebook {
@@ -663,21 +969,35 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
         }
         
         .social-btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         /* Responsive styles */
-        @media (max-width: 1024px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
-            
+        @media (max-width: 1200px) {
             .sidebar {
-                position: static;
+                width: 240px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                transition: all 0.3s ease;
             }
             
-            .grid-2-col {
-                grid-template-columns: 1fr;
+            .sidebar.active {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
             }
         }
 
@@ -686,332 +1006,385 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
                 grid-template-columns: 1fr 1fr;
             }
             
-            .loyalty-status {
-                flex-direction: column;
-                text-align: center;
+            .benefits-grid {
+                grid-template-columns: 1fr;
             }
             
-            .header-content {
+            .loyalty-card {
                 flex-direction: column;
-                gap: 15px;
                 text-align: center;
             }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 576px) {
             .quick-actions {
                 grid-template-columns: 1fr;
             }
             
-            .card {
-                padding: 20px 15px;
+            .dashboard-card {
+                padding: 20px;
             }
 
             .social-share {
                 flex-direction: column;
             }
+            
+            .modal-content {
+                padding: 20px;
+            }
         }
 
-        /* Animation for cards */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
-        .card {
-            animation: fadeIn 0.5s ease-out forwards;
+        .action-card:hover .action-icon {
+            animation: float 1.5s ease-in-out infinite;
         }
 
-        .card:nth-child(1) { animation-delay: 0.1s; }
-        .card:nth-child(2) { animation-delay: 0.2s; }
-        .card:nth-child(3) { animation-delay: 0.3s; }
-        .card:nth-child(4) { animation-delay: 0.4s; }
-
-        /* Hover effects for loyalty badge */
-        .loyalty-badge {
-            transition: all 0.3s;
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            background-color: var(--sales-orange);
+            color: white;
+            border-radius: 8px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
         }
 
-        .loyalty-badge:hover {
-            transform: scale(1.1);
-            box-shadow: 0 5px 15px rgba(217, 122, 65, 0.3);
+        @media (max-width: 992px) {
+            .mobile-menu-toggle {
+                display: flex;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container header-content">
-            <div class="logo">JunkValue</div>
-            <div class="user-info">
-                <span>Hello, <?php echo htmlspecialchars($user_name); ?>!</span>
-                <div class="user-avatar">
-                    <?php if (!empty($user['profile_image']) && file_exists($user['profile_image'])): ?>
-                        <img src="<?php echo htmlspecialchars($user['profile_image']); ?>" alt="Profile">
-                    <?php else: ?>
-                        <?php echo $user_initials; ?>
-                    <?php endif; ?>
-                </div>
+    <!-- Mobile Menu Toggle -->
+    <div class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="user-avatar">
+                <?php if (!empty($user['profile_image']) && file_exists($user['profile_image'])): ?>
+                    <img src="<?php echo htmlspecialchars($user['profile_image']); ?>" alt="Profile">
+                <?php else: ?>
+                    <?php echo $user_initials; ?>
+                <?php endif; ?>
+            </div>
+            <div class="user-name"><?php echo htmlspecialchars($user_name); ?></div>
+            <div class="user-status">
+                <span class="status-indicator"></span>
+                <span>Active</span>
             </div>
         </div>
-    </header>
+        
+        <ul class="nav-menu">
+            <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="Transaction.php"><i class="fas fa-history"></i> Transaction History</a></li>
+            <li><a href="Schedule.php"><i class="fas fa-calendar-alt"></i> Schedule Pickup</a></li>
+            <li><a href="prices.php"><i class="fas fa-coins"></i> Current Prices</a></li>
+            <li><a href="rewards.php"><i class="fas fa-award"></i> Loyalty Rewards</a></li>
+            <li><a href="settings.php"><i class="fas fa-user-cog"></i> Account Settings</a></li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <a href="Login/Login.php" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </div>
     
-    <div class="container">
-        <div class="dashboard">
-            <div class="sidebar">
-                <ul class="nav-menu">
-                    <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="Transaction.php"><i class="fas fa-history"></i> Transaction History</a></li>
-                    <li><a href="Schedule.php"><i class="fas fa-calendar-alt"></i> Schedule Pickup</a></li>
-                    <li><a href="prices.php"><i class="fas fa-coins"></i> Current Prices</a></li>
-                    <li><a href="rewards.php"><i class="fas fa-award"></i> Loyalty Rewards</a></li>
-                    <li><a href="settings.php"><i class="fas fa-user-cog"></i> Account Settings</a></li>
-                    <li><a href="Login/Login.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                </ul>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1 class="page-title">Dashboard</h1>
+            <div class="notification-bell">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </div>
+        </div>
+        
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <div class="welcome-content">
+                <h2>Welcome back, <?php echo htmlspecialchars($user['first_name']); ?>!</h2>
+                <p>Ready to turn your scrap into cash? Check today's prices, schedule a pickup, or track your rewards below.</p>
+                <button class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-plus"></i> New Transaction
+                </button>
+            </div>
+            <div class="welcome-icon">
+                <i class="fas fa-recycle"></i>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <a href="Schedule.php" class="action-card">
+                <div class="action-icon">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <h3 class="action-title">Request Pickup</h3>
+                <p class="action-desc">Schedule a collection for your recyclables</p>
+            </a>
+            
+            <div class="action-card" onclick="document.getElementById('priceCalculatorModal').style.display='block'">
+                <div class="action-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <h3 class="action-title">Price Calculator</h3>
+                <p class="action-desc">Estimate your earnings</p>
             </div>
             
-            <!-- Main Content -->
-            <div class="main-content">
-                <!-- Welcome Banner -->
-                <div class="card" style="background: linear-gradient(135deg, var(--panel-cream) 0%, var(--bg-beige) 100%); border: 1px solid rgba(217, 122, 65, 0.2);">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <h2 style="color: var(--topbar-brown); margin-bottom: 10px;">Welcome back, <?php echo htmlspecialchars($user['first_name']); ?>!</h2>
-                            <p style="color: var(--text-dark); max-width: 600px;">Ready to turn your scrap into cash? Check today's prices, schedule a pickup, or track your rewards below.</p>
+            <div class="action-card" onclick="document.getElementById('qrCodeModal').style.display='block'">
+                <div class="action-icon">
+                    <i class="fas fa-qrcode"></i>
+                </div>
+                <h3 class="action-title">Scan QR Code</h3>
+                <p class="action-desc">Quick check-in at our facility</p>
+            </div>
+            
+            <div class="action-card" onclick="document.getElementById('referFriendModal').style.display='block'">
+                <div class="action-icon">
+                    <i class="fas fa-share-alt"></i>
+                </div>
+                <h3 class="action-title">Refer a Friend</h3>
+                <p class="action-desc">Earn bonus points for referrals</p>
+            </div>
+        </div>
+        
+        <!-- Current Prices -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-coins"></i> Today's Scrap Prices</h3>
+                <span style="color: var(--text-dark); opacity: 0.7; font-size: 14px;">
+                    <i class="fas fa-sync-alt"></i> Updated: <?php echo date('g:i A'); ?>
+                </span>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="price-table">
+                    <thead>
+                        <tr>
+                            <th>Material</th>
+                            <th>Price (per kg)</th>
+                            <th>Trend</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Copper Wire</td>
+                            <td>₱285.70</td>
+                            <td><i class="fas fa-arrow-up trend-up"></i> +₱5.00</td>
+                        </tr>
+                        <tr>
+                            <td>PET Bottles</td>
+                            <td>₱28.57</td>
+                            <td><i class="fas fa-arrow-up trend-up"></i> +₱1.00</td>
+                        </tr>
+                        <tr>
+                            <td>Aluminum Cans</td>
+                            <td>₱68.57</td>
+                            <td><i class="fas fa-arrow-down trend-down"></i> -₱2.00</td>
+                        </tr>
+                        <tr>
+                            <td>Cardboard</td>
+                            <td>₱17.14</td>
+                            <td><i class="fas fa-equals trend-neutral"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Steel</td>
+                            <td>₱45.71</td>
+                            <td><i class="fas fa-arrow-up trend-up"></i> +₱3.00</td>
+                        </tr>
+                        <tr>
+                            <td>Glass Bottles</td>
+                            <td>₱14.29</td>
+                            <td><i class="fas fa-equals trend-neutral"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Computer Parts</td>
+                            <td>₱85.71</td>
+                            <td><i class="fas fa-arrow-up trend-up"></i> +₱8.00</td>
+                        </tr>
+                        <tr>
+                            <td>Iron Scrap</td>
+                            <td>₱18.00</td>
+                            <td><i class="fas fa-equals trend-neutral"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Stainless Steel</td>
+                            <td>₱65.00</td>
+                            <td><i class="fas fa-arrow-up trend-up"></i> +₱3.00</td>
+                        </tr>
+                        <tr>
+                            <td>E-Waste</td>
+                            <td>₱120.00</td>
+                            <td><i class="fas fa-arrow-up trend-up"></i> +₱8.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Two Column Layout -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+            <!-- Loyalty Program -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-award"></i> Your Loyalty Rewards</h3>
+                </div>
+                
+                <div class="loyalty-card">
+                    <div class="loyalty-badge">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>Silver Member</span>
+                            <span>650/1000 points</span>
                         </div>
-                        <div style="font-size: 60px; color: rgba(217, 122, 65, 0.2);">
-                            <i class="fas fa-recycle"></i>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Quick Actions -->
-                <div class="quick-actions">
-                    <a href="Schedule.php" class="action-btn">
-                        <i class="fas fa-truck"></i>
-                        <span>Request Pickup</span>
+                <h4 style="margin-bottom: 15px; color: var(--text-dark);">Your Benefits</h4>
+                <ul class="benefits-list">
+                    <li><i class="fas fa-check-circle"></i> 5% bonus on all sales</li>
+                    <li><i class="fas fa-check-circle"></i> 2 free pickups/month</li>
+                    <li><i class="fas fa-check-circle"></i> Priority service</li>
+                    <li><i class="fas fa-check-circle"></i> Exclusive offers</li>
+                </ul>
+                
+                <div class="reward-card">
+                    <p>Recycle 50kg this week to earn +100 points</p>
+                    <div class="progress-mini">
+                        <div class="progress-mini-bar">
+                            <div class="progress-mini-fill"></div>
+                        </div>
+                        <span style="font-size: 12px; color: var(--text-dark); opacity: 0.7;">15/50kg</span>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary">
+                    Redeem Points (650 available)
+                </button>
+            </div>
+            
+            <!-- Recent Transactions -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-history"></i> Recent Transactions</h3>
+                    <a href="Transaction.php" class="view-all">
+                        View All <i class="fas fa-arrow-right"></i>
                     </a>
-                    <div class="action-btn" onclick="document.getElementById('priceCalculatorModal').style.display='block'">
-                        <i class="fas fa-calculator"></i>
-                        <span>Price Calculator</span>
-                    </div>
-                    <div class="action-btn" onclick="document.getElementById('qrCodeModal').style.display='block'">
-                        <i class="fas fa-qrcode"></i>
-                        <span>Scan QR Code</span>
-                    </div>
-                    <div class="action-btn" onclick="document.getElementById('referFriendModal').style.display='block'">
-                        <i class="fas fa-share-alt"></i>
-                        <span>Refer a Friend</span>
-                    </div>
                 </div>
                 
-              <!-- Current Prices -->
-<div class="card">
-    <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-coins"></i> Today's Scrap Prices</h3>
-        <span style="color: var(--text-light); font-size: 14px;"><i class="fas fa-sync-alt"></i> Updated: <?php echo date('g:i A'); ?></span>
-    </div>
-    <table class="price-table">
-        <thead>
-            <tr>
-                <th>Material</th>
-                <th>Price (per kg)</th>
-                <th>Trend</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Copper Wire</td>
-                <td>₱285.70</td>
-                <td><i class="fas fa-arrow-up trend-up"></i> +₱5.00</td>
-            </tr>
-            <tr>
-                <td>PET Bottles</td>
-                <td>₱28.57</td>
-                <td><i class="fas fa-arrow-up trend-up"></i> +₱1.00</td>
-            </tr>
-            <tr>
-                <td>Aluminum Cans</td>
-                <td>₱68.57</td>
-                <td><i class="fas fa-arrow-down trend-down"></i> -₱2.00</td>
-            </tr>
-            <tr>
-                <td>Cardboard</td>
-                <td>₱17.14</td>
-                <td><i class="fas fa-equals trend-neutral"></i></td>
-            </tr>
-            <tr>
-                <td>Steel</td>
-                <td>₱45.71</td>
-                <td><i class="fas fa-arrow-up trend-up"></i> +₱3.00</td>
-            </tr>
-            <tr>
-                <td>Glass Bottles</td>
-                <td>₱14.29</td>
-                <td><i class="fas fa-equals trend-neutral"></i></td>
-            </tr>
-            <tr>
-                <td>Computer Parts</td>
-                <td>₱85.71</td>
-                <td><i class="fas fa-arrow-up trend-up"></i> +₱8.00</td>
-            </tr>
-            <tr>
-                <td>Iron Scrap</td>
-                <td>₱18.00</td>
-                <td><i class="fas fa-equals trend-neutral"></i></td>
-            </tr>
-            <tr>
-                <td>Stainless Steel</td>
-                <td>₱65.00</td>
-                <td><i class="fas fa-arrow-up trend-up"></i> +₱3.00</td>
-            </tr>
-            <tr>
-                <td>E-Waste</td>
-                <td>₱120.00</td>
-                <td><i class="fas fa-arrow-up trend-up"></i> +₱8.00</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-                
-                <!-- Loyalty Program -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-award"></i> Your Loyalty Rewards</h3>
-                    </div>
-                    <div class="loyalty-status">
-                        <div class="loyalty-badge">
-                            <i class="fas fa-crown"></i>
-                        </div>
-                        <div class="loyalty-progress">
-                            <div class="progress-bar">
-                                <div class="progress-fill"></div>
-                            </div>
-                            <p style="color: var(--text-dark);">Silver Member (650/1000 points to Gold)</p>
-                        </div>
-                    </div>
-                    <div class="grid-2-col">
-                        <div>
-                            <h4 style="margin-bottom: 15px; color: var(--text-dark);">Your Benefits</h4>
-                            <ul class="benefits-list">
-                                <li><i class="fas fa-check-circle"></i> 5% bonus on all sales</li>
-                                <li><i class="fas fa-check-circle"></i> 2 free pickups/month</li>
-                                <li><i class="fas fa-check-circle"></i> Priority service</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 style="margin-bottom: 15px; color: var(--text-dark);">Quick Rewards</h4>
-                            <div class="reward-card">
-                                <p>Recycle 50kg this week to earn +100 points</p>
-                                <div class="progress-mini">
-                                    <div class="progress-mini-bar">
-                                        <div class="progress-mini-fill"></div>
+                <div class="transaction-list">
+                    <?php if (mysqli_num_rows($transaction_result) > 0): ?>
+                        <?php while ($transaction = mysqli_fetch_assoc($transaction_result)): ?>
+                            <?php
+                            // Determine icon and color based on transaction type
+                            $icon = '';
+                            $color = 'var(--icon-green)';
+                            switch($transaction['transaction_type']) {
+                                case 'Pickup':
+                                    $icon = 'fa-truck-loading';
+                                    break;
+                                case 'Walk-in':
+                                    $icon = 'fa-coins';
+                                    break;
+                                case 'Loyalty':
+                                    $icon = 'fa-award';
+                                    $color = 'var(--sales-orange)';
+                                    break;
+                                default:
+                                    $icon = 'fa-exchange-alt';
+                            }
+                            ?>
+                            <div class="transaction-item">
+                                <div class="transaction-info">
+                                    <div class="transaction-icon" style="color: <?php echo $color; ?>">
+                                        <i class="fas <?php echo $icon; ?>"></i>
                                     </div>
-                                    <span style="font-size: 12px; color: var(--text-light);">15/50kg</span>
-                                </div>
-                            </div>
-                            <button class="btn-primary">
-                                Redeem Points (650 available)
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Recent Transactions -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-history"></i> Recent Transactions</h3>
-                        <a href="Transaction.php" style="color: var(--icon-green); text-decoration: none; font-weight: 500;">View All <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                    <div>
-                        <?php if (mysqli_num_rows($transaction_result) > 0): ?>
-                            <?php while ($transaction = mysqli_fetch_assoc($transaction_result)): ?>
-                                <?php
-                                // Determine icon and color based on transaction type
-                                $icon = '';
-                                $color = 'var(--icon-green)';
-                                switch($transaction['transaction_type']) {
-                                    case 'Pickup':
-                                        $icon = 'fa-truck-loading';
-                                        break;
-                                    case 'Walk-in':
-                                        $icon = 'fa-coins';
-                                        break;
-                                    case 'Loyalty':
-                                        $icon = 'fa-award';
-                                        $color = 'var(--sales-orange)';
-                                        break;
-                                    default:
-                                        $icon = 'fa-exchange-alt';
-                                }
-                                ?>
-                                <div class="transaction">
-                                    <div class="transaction-info">
-                                        <div class="transaction-icon" style="color: <?php echo $color; ?>">
-                                            <i class="fas <?php echo $icon; ?>"></i>
-                                        </div>
-                                        <div class="transaction-details">
-                                            <h4><?php echo htmlspecialchars($transaction['name']); ?></h4>
-                                            <p>
-                                                <?php echo date('M j, Y', strtotime($transaction['transaction_date'])); ?> • 
-                                                <?php echo htmlspecialchars($transaction['item_details']); ?>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="transaction-amount" style="color: <?php echo $color; ?>">
-                                        +₱<?php echo number_format($transaction['amount'], 2); ?>
+                                    <div class="transaction-details">
+                                        <h4><?php echo htmlspecialchars($transaction['name']); ?></h4>
+                                        <p>
+                                            <?php echo date('M j, Y', strtotime($transaction['transaction_date'])); ?> • 
+                                            <?php echo htmlspecialchars($transaction['item_details']); ?>
+                                        </p>
                                     </div>
                                 </div>
-                            <?php endwhile; ?>
-                        <?php else: ?>
-                            <div style="text-align: center; padding: 30px; color: var(--text-light);">
-                                <i class="fas fa-info-circle" style="font-size: 30px; margin-bottom: 15px; color: var(--icon-green);"></i>
-                                <p>No recent transactions found</p>
+                                <div class="transaction-amount" style="color: <?php echo $color; ?>">
+                                    +₱<?php echo number_format($transaction['amount'], 2); ?>
+                                </div>
                             </div>
-                        <?php endif; ?>
-                    </div>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <div class="empty-state">
+                            <i class="fas fa-info-circle"></i>
+                            <p>No recent transactions found</p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Price Calculator Modal -->
-<div id="priceCalculatorModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <h3><i class="fas fa-calculator"></i> Price Calculator</h3>
-        <div class="calculator-form">
-            <div class="form-group">
-                <label for="material-type">Material Type</label>
-                <select id="material-type">
-                    <option value="copper">Copper Wire</option>
-                    <option value="pet">PET Bottles</option>
-                    <option value="aluminum">Aluminum Cans</option>
-                    <option value="cardboard">Cardboard</option>
-                    <option value="steel">Steel</option>
-                    <option value="glass">Glass Bottles</option>
-                    <option value="computer">Computer Parts</option>
-                    <option value="iron">Iron Scrap</option>
-                    <option value="stainless">Stainless Steel</option>
-                    <option value="ewaste">E-Waste</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="weight">Weight (kg)</label>
-                <input type="number" id="weight" placeholder="Enter weight in kilograms" step="0.01">
-            </div>
-            <button id="calculate-btn" class="btn-primary">Calculate Value</button>
-            <div class="result-container">
-                <h4>Estimated Value:</h4>
-                <div id="calculated-result">₱0.00</div>
+    <div id="priceCalculatorModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="document.getElementById('priceCalculatorModal').style.display='none'">&times;</span>
+            <h3><i class="fas fa-calculator"></i> Price Calculator</h3>
+            <div class="calculator-form">
+                <div class="form-group">
+                    <label for="material-type">Material Type</label>
+                    <select id="material-type">
+                        <option value="copper">Copper Wire</option>
+                        <option value="pet">PET Bottles</option>
+                        <option value="aluminum">Aluminum Cans</option>
+                        <option value="cardboard">Cardboard</option>
+                        <option value="steel">Steel</option>
+                        <option value="glass">Glass Bottles</option>
+                        <option value="computer">Computer Parts</option>
+                        <option value="iron">Iron Scrap</option>
+                        <option value="stainless">Stainless Steel</option>
+                        <option value="ewaste">E-Waste</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="weight">Weight (kg)</label>
+                    <input type="number" id="weight" placeholder="Enter weight in kilograms" step="0.01">
+                </div>
+                <button id="calculate-btn" class="btn btn-primary">Calculate Value</button>
+                <div class="result-container">
+                    <h4>Estimated Value:</h4>
+                    <div id="calculated-result">₱0.00</div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <!-- QR Code Modal -->
     <div id="qrCodeModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal">&times;</span>
+            <span class="close-modal" onclick="document.getElementById('qrCodeModal').style.display='none'">&times;</span>
             <h3><i class="fas fa-qrcode"></i> Your QR Code</h3>
             <div class="qr-code-container">
                 <?php 
@@ -1021,7 +1394,7 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=<?php echo urlencode($qr_code_data); ?>" 
                      alt="QR Code for <?php echo htmlspecialchars($user_name); ?>" class="qr-code-image">
                 <p>Scan this code at our facility for quick check-in</p>
-                <button class="btn-primary" onclick="downloadQRCode()">
+                <button class="btn btn-primary" onclick="downloadQRCode()">
                     <i class="fas fa-download"></i> Download QR Code
                 </button>
             </div>
@@ -1031,7 +1404,7 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
     <!-- Refer a Friend Modal -->
     <div id="referFriendModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal">&times;</span>
+            <span class="close-modal" onclick="document.getElementById('referFriendModal').style.display='none'">&times;</span>
             <h3><i class="fas fa-share-alt"></i> Refer a Friend</h3>
             <div class="referral-content">
                 <p>Share your referral link and earn 100 loyalty points for each friend who signs up and completes their first transaction!</p>
@@ -1058,59 +1431,47 @@ $transaction_result = mysqli_stmt_get_result($transaction_stmt);
     </div>
 
     <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+
         // Modal functionality
         document.addEventListener('DOMContentLoaded', function() {
-            // Get modal elements
-            const priceCalcModal = document.getElementById('priceCalculatorModal');
-            const qrCodeModal = document.getElementById('qrCodeModal');
-            const referModal = document.getElementById('referFriendModal');
+            // Price calculator logic
+            const calculateBtn = document.getElementById('calculate-btn');
+            calculateBtn.addEventListener('click', calculatePrice);
             
-            // Get close buttons
-            const closeButtons = document.querySelectorAll('.close-modal');
-            
-            // Close modals when clicking X
-            closeButtons.forEach(function(btn) {
-                btn.onclick = function() {
-                    const modal = this.closest('.modal');
-                    modal.style.display = 'none';
-                }
-            });
-            
+            function calculatePrice() {
+                const material = document.getElementById('material-type').value;
+                const weight = parseFloat(document.getElementById('weight').value) || 0;
+                
+                // Prices per kg - updated with the new values
+                const prices = {
+                    'copper': 285.70,
+                    'pet': 28.57,
+                    'aluminum': 68.57,
+                    'cardboard': 17.14,
+                    'steel': 45.71,
+                    'glass': 14.29,
+                    'computer': 85.71,
+                    'iron': 18.00,
+                    'stainless': 65.00,
+                    'ewaste': 120.00
+                };
+                
+                const pricePerKg = prices[material];
+                const total = (pricePerKg * weight).toFixed(2);
+                
+                document.getElementById('calculated-result').textContent = `₱${total}`;
+            }
+
             // Close modals when clicking outside
             window.onclick = function(event) {
                 if (event.target.classList.contains('modal')) {
                     event.target.style.display = 'none';
                 }
             }
-            
-                // Price calculator logic
-    const calculateBtn = document.getElementById('calculate-btn');
-    calculateBtn.addEventListener('click', calculatePrice);
-    
-    function calculatePrice() {
-        const material = document.getElementById('material-type').value;
-        const weight = parseFloat(document.getElementById('weight').value) || 0;
-        
-        // Prices per kg - updated with the new values
-        const prices = {
-            'copper': 285.70,
-            'pet': 28.57,
-            'aluminum': 68.57,
-            'cardboard': 17.14,
-            'steel': 45.71,
-            'glass': 14.29,
-            'computer': 85.71,
-            'iron': 18.00,
-            'stainless': 65.00,
-            'ewaste': 120.00
-        };
-        
-        const pricePerKg = prices[material];
-        const total = (pricePerKg * weight).toFixed(2);
-        
-        document.getElementById('calculated-result').textContent = `₱${total}`;
-    }
-
         });
         
         // Download QR Code
